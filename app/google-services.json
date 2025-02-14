@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "178139148946",
+    "project_id": "android-do-an-ck",
+    "storage_bucket": "android-do-an-ck.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:178139148946:android:15a012edc9309af5f46c4b",
+        "android_client_info": {
+          "package_name": "com.example.do_an"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA45TDej61yVlrpfXdOausTIyeagaQOxe0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
