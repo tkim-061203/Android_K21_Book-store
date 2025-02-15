@@ -2,7 +2,8 @@
   "project_info": {
     "project_number": "178139148946",
     "project_id": "android-do-an-ck",
-    "storage_bucket": "android-do-an-ck.firebasestorage.app"
+    "storage_bucket": "android-do-an-ck.firebasestorage.app",
+    "firebase_url":"https://android-do-an-ck-default-rtdb.asia-southeast1.firebasedatabase.app/"
   },
   "client": [
     {
