@@ -138,20 +138,25 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <TextView
-                android:id="@+id/ForgotPasswordText"
-                android:layout_width="wrap_content"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Forgot Password?"
-                android:textColor="#344CB7"
-                android:textSize="15dp"
-                android:layout_marginLeft="89dp"
-                android:clickable="true"
-                android:focusable="true"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/LoginRedirectText" />
-
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@+id/textView6">
+                <TextView
+                    android:id="@+id/textView8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Forgot Password?"
+                    android:textColor="#344CB7"
+                    android:textSize="15dp"
+                    android:layout_marginLeft="175dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    tools:ignore="MissingConstraints,NotSibling" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>

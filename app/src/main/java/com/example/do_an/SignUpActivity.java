@@ -74,14 +74,15 @@ public class SignUpActivity extends AppCompatActivity {
                             .addOnCompleteListener(SignUpActivity.this, new OnCompleteListener<AuthResult>() {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
-                                    Log.d("SignUp", "createUserWithEmailAndPassword completed");
 
                                     if (task.isSuccessful()) {
                                         // If the task is successful, proceed with saving user data
                                         FirebaseUser user = mAuth.getCurrentUser();
+
                                         if (user != null) {
-                                            HelperClass helperClass = new HelperClass(name, email, username, password);
-                                            reference.child(username).setValue(helperClass);
+                                            String userId = user.getUid();
+                                            HelperClass helperClass = new HelperClass(name, email, username);
+                                            reference.child(userId).setValue(helperClass);
                                             Log.d("SignUp", "Update database completed");
                                             Toast.makeText(SignUpActivity.this, "You have signup successfully!", Toast.LENGTH_SHORT).show();
                                             Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);

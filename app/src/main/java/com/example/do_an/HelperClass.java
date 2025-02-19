@@ -1,17 +1,16 @@
 package com.example.do_an;
 
 public class HelperClass {
-    private String name, email, username, password;
+    private String name, email, username;
 
     public HelperClass() {
         // Default constructor required for Firebase
     }
 
-    public HelperClass(String name, String email, String username, String password) {
+    public HelperClass(String name, String email, String username) {
         this.name = name;
         this.email = email;
         this.username = username;
-        this.password = password;
     }
 
     // Getters and setters for each field
@@ -39,12 +38,5 @@ public class HelperClass {
         this.username = username;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
 }
 

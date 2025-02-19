@@ -114,6 +114,11 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@+id/textView6">
             <TextView
                 android:id="@+id/textView8"
                 android:layout_width="wrap_content"
@@ -121,13 +126,14 @@
                 android:text="Forgot Password?"
                 android:textColor="#344CB7"
                 android:textSize="15dp"
-                android:layout_marginLeft="89dp"
+                android:layout_marginLeft="175dp"
                 android:clickable="true"
                 android:focusable="true"
-                app:layout_constraintBottom_toTopOf="@+id/login"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/input_Password" />
+                app:layout_constraintTop_toBottomOf="@+id/input_Password"
+                tools:ignore="NotSibling" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </LinearLayout>
 

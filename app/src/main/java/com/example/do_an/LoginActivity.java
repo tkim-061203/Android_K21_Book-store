@@ -25,6 +25,8 @@ public class LoginActivity extends AppCompatActivity {
     private EditText loginEmail, loginPassword;
     private Button loginButton;
     private TextView signUpRedirectText, forgotPasswordText;
+    private FirebaseDatabase database;
+    private DatabaseReference reference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +35,8 @@ public class LoginActivity extends AppCompatActivity {
 
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
+        database = FirebaseDatabase.getInstance();
+        reference = database.getReference("users");
 
         // Find Views
         loginEmail = findViewById(R.id.input_signup_email);
@@ -42,74 +46,70 @@ public class LoginActivity extends AppCompatActivity {
         forgotPasswordText = findViewById(R.id.textView8);
 
         // Login Button OnClickListener
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String email = loginEmail.getText().toString().trim();
-                String password = loginPassword.getText().toString().trim();
+        loginButton.setOnClickListener(view -> {
+            String email = loginEmail.getText().toString().trim();
+            String password = loginPassword.getText().toString().trim();
 
-                // Validate email and password input
-                if (email.isEmpty()) {
-                    loginEmail.setError("Email cannot be empty");
-                } else if (password.isEmpty()) {
-                    loginPassword.setError("Password cannot be empty");
-                } else {
-                    // Firebase authentication login
-                    mAuth.signInWithEmailAndPassword(email, password)
-                            .addOnCompleteListener(LoginActivity.this, task -> {
-                                if (task.isSuccessful()) {
-                                    // Login success, get current user
-                                    FirebaseUser user = mAuth.getCurrentUser();
-                                    if (user != null) {
-                                        // Retrieve user data from Realtime Database
-                                        retrieveUserData(user.getUid());
-                                    }
-                                } else {
-                                    // Login failed, show error message
-                                    Toast.makeText(LoginActivity.this, "Authentication Failed: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
+            // Validate email and password input
+            if (email.isEmpty()) {
+                loginEmail.setError("Email cannot be empty");
+            } else if (password.isEmpty()) {
+                loginPassword.setError("Password cannot be empty");
+            } else {
+                // Firebase authentication login
+                mAuth.signInWithEmailAndPassword(email, password)
+                        .addOnCompleteListener(LoginActivity.this, task -> {
+                            if (task.isSuccessful()) {
+                                // Login success, get current user
+                                FirebaseUser user = mAuth.getCurrentUser();
+                                if (user != null) {
+                                    // Retrieve user data from Realtime Database
+                                    retrieveUserData(user.getUid());
                                 }
-                            });
-                }
+                            } else {
+                                // Login failed, show error message
+                                Toast.makeText(LoginActivity.this, "Authentication Failed: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                            }
+                        });
             }
         });
 
         // Redirect to SignUp Activity when "Create a new account" text is clicked
-        signUpRedirectText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(LoginActivity.this, SignUpActivity.class));
-                finish();  // Close LoginActivity
-            }
+        signUpRedirectText.setOnClickListener(view -> {
+            startActivity(new Intent(LoginActivity.this, SignUpActivity.class));
+            finish();  // Close LoginActivity
         });
 
         // Redirect to ForgotPassword Activity when "Forgot Password?" text is clicked
-        forgotPasswordText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(LoginActivity.this, ForgotPasswordActivity.class));
-            }
+        forgotPasswordText.setOnClickListener(view -> {
+            startActivity(new Intent(LoginActivity.this, ForgotPasswordActivity.class));
         });
     }
 
     // Retrieve user data from Firebase Realtime Database using userId (UID)
     private void retrieveUserData(String userId) {
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(userId);
+        if (userId == null || userId.isEmpty()) {
+            // Handle case where userId is invalid
+            Toast.makeText(LoginActivity.this, "Invalid user ID", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         // Get user data from Firebase Realtime Database
-        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+        reference.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
                     // Retrieve the user information (name, email, username) from the snapshot
                     HelperClass user = dataSnapshot.getValue(HelperClass.class);
+
                     if (user != null) {
                         // Successfully retrieved user data from database
-                        // Here you can use user data for personalization or display
                         Toast.makeText(LoginActivity.this, "Welcome, " + user.getName(), Toast.LENGTH_SHORT).show();
+                        navigateToMainActivity();
+                    } else {
+                        // If the user data exists but is not in the expected format (null values)
+                        Toast.makeText(LoginActivity.this, "User data is corrupted", Toast.LENGTH_SHORT).show();
                     }
-                    // Navigate to the main screen (MainActivity) after successful login
-                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                    finish();  // Close LoginActivity
                 } else {
                     // If the user data doesn't exist in the database, show an error message
                     Toast.makeText(LoginActivity.this, "No user data found", Toast.LENGTH_SHORT).show();
@@ -122,5 +122,10 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(LoginActivity.this, "Failed to retrieve data: " + databaseError.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    private void navigateToMainActivity() {
+        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+        finish();  // Close LoginActivity
     }
 }
