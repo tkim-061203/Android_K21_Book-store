@@ -81,7 +81,8 @@ public class SignUpActivity extends AppCompatActivity {
 
                                         if (user != null) {
                                             String userId = user.getUid();
-                                            HelperClass helperClass = new HelperClass(name, email, username);
+                                            String role = "user";
+                                            HelperClass helperClass = new HelperClass(name, email, username,role);
                                             reference.child(userId).setValue(helperClass);
                                             Log.d("SignUp", "Update database completed");
                                             Toast.makeText(SignUpActivity.this, "You have signup successfully!", Toast.LENGTH_SHORT).show();

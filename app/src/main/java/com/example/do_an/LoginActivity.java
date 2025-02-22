@@ -89,36 +89,38 @@ public class LoginActivity extends AppCompatActivity {
     // Retrieve user data from Firebase Realtime Database using userId (UID)
     private void retrieveUserData(String userId) {
         if (userId == null || userId.isEmpty()) {
-            // Handle case where userId is invalid
             Toast.makeText(LoginActivity.this, "Invalid user ID", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // Get user data from Firebase Realtime Database
+        // Lấy dữ liệu người dùng từ Firebase
         reference.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    // Retrieve the user information (name, email, username) from the snapshot
                     HelperClass user = dataSnapshot.getValue(HelperClass.class);
 
                     if (user != null) {
-                        // Successfully retrieved user data from database
-                        Toast.makeText(LoginActivity.this, "Welcome, " + user.getName(), Toast.LENGTH_SHORT).show();
-                        navigateToMainActivity();
+                        String role = user.getRole(); // Lấy role từ Firebase
+
+                        if ("admin".equals(role)) {
+                            Toast.makeText(LoginActivity.this, "Welcome, Admin " + user.getName(), Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(LoginActivity.this, AdminActivity.class));
+                        } else {
+                            Toast.makeText(LoginActivity.this, "Welcome, " + user.getName(), Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                        }
+                        finish(); // Đóng LoginActivity sau khi đăng nhập thành công
                     } else {
-                        // If the user data exists but is not in the expected format (null values)
                         Toast.makeText(LoginActivity.this, "User data is corrupted", Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    // If the user data doesn't exist in the database, show an error message
                     Toast.makeText(LoginActivity.this, "No user data found", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                // Handle any errors that occur during the retrieval process
                 Toast.makeText(LoginActivity.this, "Failed to retrieve data: " + databaseError.getMessage(), Toast.LENGTH_LONG).show();
             }
         });

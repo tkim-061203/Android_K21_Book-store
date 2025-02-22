@@ -1,19 +1,17 @@
 package com.example.do_an;
 
 public class HelperClass {
-    private String name, email, username;
+    private String name;
+    private String email;
 
-    public HelperClass() {
-        // Default constructor required for Firebase
+    public String getUsername() {
+        return username;
     }
 
-    public HelperClass(String name, String email, String username) {
-        this.name = name;
-        this.email = email;
+    public void setUsername(String username) {
         this.username = username;
     }
 
-    // Getters and setters for each field
     public String getName() {
         return name;
     }
@@ -30,13 +28,30 @@ public class HelperClass {
         this.email = email;
     }
 
-    public String getUsername() {
-        return username;
+    public String getRole() {
+        return role;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setRole(String role) {
+        this.role = role;
     }
+
+    private String username;
+    private String role;
+
+
+    public HelperClass(String name, String email, String username, String role) {
+        this.name = name;
+        this.email = email;
+        this.username = username;
+        this.role = role;
+    }
+
+
+    public HelperClass() {
+        // Default constructor required for Firebase
+    }
+
 
 }
 
