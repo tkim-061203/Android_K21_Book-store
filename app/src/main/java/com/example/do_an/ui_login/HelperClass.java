@@ -1,4 +1,4 @@
-package com.example.do_an;
+package com.example.do_an.ui_login;
 
 public class HelperClass {
     private String name;

@@ -12,15 +12,6 @@
         android:icon="@drawable/baseline_book_24"
         android:title="Library" />
 
-    <item
-        android:id="@+id/bottom_search"
-        android:icon="@drawable/baseline_search_24"
-        android:title="Search" />
-
-    <item
-        android:id="@+id/bottom_bookmark"
-        android:icon="@drawable/baseline_bookmark_24"
-        android:title="Bookmark" />
 
     <item
         android:id="@+id/bottom_profile"

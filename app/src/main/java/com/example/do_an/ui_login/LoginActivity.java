@@ -1,9 +1,10 @@
-package com.example.do_an;
+package com.example.do_an.ui_login;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
+import android.text.InputType;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -11,6 +12,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.do_an.ui_admin.AdminActivity;
+import com.example.do_an.ui_user.MainActivity;
+import com.example.do_an.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -44,8 +48,18 @@ public class LoginActivity extends AppCompatActivity {
         loginButton = findViewById(R.id.login);
         signUpRedirectText = findViewById(R.id.textView6);
         forgotPasswordText = findViewById(R.id.textView8);
-
+        CheckBox showPasswordCheckBox = findViewById(R.id.showPasswordCheckBox);
         // Login Button OnClickListener
+
+        showPasswordCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                loginPassword.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+            } else {
+                loginPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+            }
+            loginPassword.setSelection(loginPassword.getText().length());
+        });
+
         loginButton.setOnClickListener(view -> {
             String email = loginEmail.getText().toString().trim();
             String password = loginPassword.getText().toString().trim();

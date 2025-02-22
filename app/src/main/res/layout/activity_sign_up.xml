@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/background"
 
-    tools:context=".SignUpActivity">
+    tools:context=".ui_login.SignUpActivity">
 
     <androidx.cardview.widget.CardView
         android:layout_width="0dp"

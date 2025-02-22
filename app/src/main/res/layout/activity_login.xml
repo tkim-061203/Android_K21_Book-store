@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/background"
 
-    tools:context=".LoginActivity">
+    tools:context=".ui_login.LoginActivity">
 
     <androidx.cardview.widget.CardView
         android:layout_width="0dp"
@@ -60,13 +60,19 @@
                 android:background="@drawable/custom_edittext"
                 android:drawablePadding="8dp"
                 android:textColor="@color/black"
+                android:inputType="textPassword"
                 />
+
+            <CheckBox
+                android:id="@+id/showPasswordCheckBox"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Show password" />
 
             <Button
                 android:id="@+id/login"
                 android:layout_width="271dp"
                 android:layout_height="55dp"
-                android:layout_marginTop="10dp"
                 android:text="LOGIN"
                 android:textAlignment="center"
                 android:textColor="#FFFFFF"

@@ -1,16 +1,13 @@
-package com.example.do_an;
+package com.example.do_an.ui_user;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
+import com.example.do_an.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class Library extends AppCompatActivity {
@@ -35,16 +32,6 @@ public class Library extends AppCompatActivity {
                     finish();
                     return true;
                 } else if (itemId == R.id.bottom_library) {
-                    return true;
-                } else if (itemId == R.id.bottom_search) {
-                    startActivity(new Intent(getApplicationContext(), SearchActivity.class));
-                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-                    finish();
-                    return true;
-                } else if (itemId == R.id.bottom_bookmark) {
-                    startActivity(new Intent(getApplicationContext(), BookmarrkActivity.class));
-                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-                    finish();
                     return true;
                 } else if (itemId == R.id.bottom_profile) {
                     startActivity(new Intent(getApplicationContext(), ProfileActivity.class));

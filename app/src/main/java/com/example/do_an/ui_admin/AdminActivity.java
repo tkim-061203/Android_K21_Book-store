@@ -1,12 +1,11 @@
-package com.example.do_an;
+package com.example.do_an.ui_admin;
 
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+
+import com.example.do_an.R;
 
 public class AdminActivity extends AppCompatActivity {
 
@@ -16,4 +15,6 @@ public class AdminActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_admin);
     }
+
+
 }
