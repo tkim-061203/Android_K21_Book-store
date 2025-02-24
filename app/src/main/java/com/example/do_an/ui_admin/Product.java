@@ -38,6 +38,12 @@ public class Product extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_product);
 
+        FloatingActionButton buttonAddProduct = findViewById(R.id.button_AddProduct);
+
+        buttonAddProduct.setOnClickListener(view -> {
+            Intent intent = new Intent(Product.this, AddProductActivity.class);
+            startActivity(intent);
+        });
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
         bottomNavigationView.setSelectedItemId(R.id.bottom_book);
