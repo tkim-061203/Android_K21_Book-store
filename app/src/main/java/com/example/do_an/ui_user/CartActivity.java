@@ -5,20 +5,25 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import com.example.do_an.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class Library extends AppCompatActivity {
+public class CartActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_library);
+        EdgeToEdge.enable(this);
+        setContentView(R.layout.activity_cart);
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
-        bottomNavigationView.setSelectedItemId(R.id.bottom_library);
+        bottomNavigationView.setSelectedItemId(R.id.bottom_cart);
 
         // Using the OnItemSelectedListener correctly
         bottomNavigationView.setOnItemSelectedListener(new BottomNavigationView.OnItemSelectedListener() {
@@ -31,7 +36,7 @@ public class Library extends AppCompatActivity {
                     overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                     finish();
                     return true;
-                } else if (itemId == R.id.bottom_library) {
+                } else if (itemId == R.id.bottom_cart) {
                     return true;
                 } else if (itemId == R.id.bottom_profile) {
                     startActivity(new Intent(getApplicationContext(), ProfileActivity.class));

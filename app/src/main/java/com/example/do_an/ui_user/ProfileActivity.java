@@ -82,8 +82,8 @@ public class ProfileActivity extends AppCompatActivity {
                     overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                     finish();
                     return true;
-                } else if (itemId == R.id.bottom_library) {
-                    startActivity(new Intent(getApplicationContext(), Library.class));
+                } else if (itemId == R.id.bottom_cart) {
+                    startActivity(new Intent(getApplicationContext(), CartActivity.class));
                     overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                     finish();
                     return true;
