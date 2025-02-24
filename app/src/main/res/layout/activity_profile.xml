@@ -1,22 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui_user.MainActivity">
+    android:background="#F4F5FB"
+    tools:context=".ui_user.ProfileActivity">
 
+    <!-- Ảnh đại diện -->
+    <ImageView
+        android:id="@+id/profile_image"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_marginTop="40dp"
+        android:src="@drawable/avatar_placeholder"
+        android:scaleType="centerCrop"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/profile_name"/>
+
+    <!-- Tên người dùng -->
     <TextView
+        android:id="@+id/profile_name"
         android:layout_width="wrap_content"
-        android:layout_height="48dp"
-        android:layout_centerInParent="true"
-        android:text="Profile"
-        android:textColor="@color/black"
-        android:textSize="36sp"
-        tools:layout_editor_absoluteX="157dp"
-        tools:layout_editor_absoluteY="299dp"
-        tools:ignore="MissingConstraints" />
+        android:layout_height="wrap_content"
+        android:text="Nguyễn Ngọc Minh Trí"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:textColor="#333333"
+        app:layout_constraintTop_toBottomOf="@id/profile_image"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"/>
 
+    <!-- Email -->
+    <TextView
+        android:id="@+id/profile_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="tri@example.com"
+        android:textSize="16sp"
+        android:textColor="#666666"
+        app:layout_constraintTop_toBottomOf="@id/profile_name"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="8dp"/>
+
+    <!-- Nút Chỉnh sửa hồ sơ -->
+    <Button
+        android:id="@+id/btn_edit_profile"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:text="Chỉnh sửa hồ sơ"
+        android:backgroundTint="#3F51B5"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/profile_email"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="24dp"/>
+
+    <!-- Nút Đổi mật khẩu -->
+    <Button
+        android:id="@+id/btn_change_password"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:text="Đổi mật khẩu"
+        android:backgroundTint="#FFA726"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/btn_edit_profile"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"/>
+
+    <!-- Nút Đăng xuất -->
+    <Button
+        android:id="@+id/btn_logout"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:text="Đăng xuất"
+        android:backgroundTint="#D32F2F"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/btn_change_password"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"/>
+
+    <!-- Thanh điều hướng -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigation"
         android:layout_width="match_parent"
@@ -32,6 +109,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/bottom_menu" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
