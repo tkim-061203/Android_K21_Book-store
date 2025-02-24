@@ -13,6 +13,15 @@
         android:theme="@style/Theme.Do_an"
         tools:targetApi="31">
         <activity
+            android:name=".ui_admin.OrderActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui_admin.Setting"
+            android:exported="false" />
+        <activity
+            android:name=".ui_admin.Product"
+            android:exported="false" />
+        <activity
             android:name=".ui_user.CartActivity"
             android:exported="false" />
         <activity
