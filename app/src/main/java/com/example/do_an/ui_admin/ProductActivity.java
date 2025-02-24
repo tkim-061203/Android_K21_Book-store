@@ -64,7 +64,7 @@ public class ProductActivity extends AppCompatActivity {
 
         // Lấy dữ liệu sản phẩm từ Firestore
         fetchProductsFromFirestore();
-        setupSearch();
+//        setupSearch();
         // Cấu hình BottomNavigationView
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
         bottomNavigationView.setSelectedItemId(R.id.bottom_book);
@@ -130,33 +130,33 @@ public class ProductActivity extends AppCompatActivity {
     }
 
     // Setup the search box functionality
-    private void setupSearch() {
-        searchBox.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                filterProducts(s.toString());
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {}
-        });
-    }
-
-    // Filter products based on the search query
-    private void filterProducts(String query) {
-        filteredList.clear();
-        if (query.isEmpty()) {
-            filteredList.addAll(productList);
-        } else {
-            for (Product product : productList) {
-                if (product.getName().toLowerCase().contains(query.toLowerCase())) {
-                    filteredList.add(product);
-                }
-            }
-        }
-        productAdapter.notifyDataSetChanged();
-    }
+//    private void setupSearch() {
+//        searchBox.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+//
+//            @Override
+//            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//                filterProducts(s.toString());
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable s) {}
+//        });
+//    }
+//
+//    // Filter products based on the search query
+//    private void filterProducts(String query) {
+//        filteredList.clear();
+//        if (query.isEmpty()) {
+//            filteredList.addAll(productList);
+//        } else {
+//            for (Product product : productList) {
+//                if (product.getName().toLowerCase().contains(query.toLowerCase())) {
+//                    filteredList.add(product);
+//                }
+//            }
+//        }
+//        productAdapter.notifyDataSetChanged();
+//    }
 }
