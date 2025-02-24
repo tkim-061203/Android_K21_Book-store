@@ -12,7 +12,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.do_an.ui_admin.AdminActivity;
+import com.example.do_an.ui_admin.CategoryActivity;
 import com.example.do_an.ui_user.MainActivity;
 import com.example.do_an.R;
 import com.google.firebase.auth.FirebaseAuth;
@@ -119,7 +119,7 @@ public class LoginActivity extends AppCompatActivity {
 
                         if ("admin".equals(role)) {
                             Toast.makeText(LoginActivity.this, "Welcome, Admin " + user.getName(), Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(LoginActivity.this, AdminActivity.class));
+                            startActivity(new Intent(LoginActivity.this, CategoryActivity.class));
                         } else {
                             Toast.makeText(LoginActivity.this, "Welcome, " + user.getName(), Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(LoginActivity.this, MainActivity.class));

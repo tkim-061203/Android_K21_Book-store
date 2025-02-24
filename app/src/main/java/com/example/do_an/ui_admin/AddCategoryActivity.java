@@ -1,16 +1,14 @@
 package com.example.do_an.ui_admin;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.example.do_an.R;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -40,6 +38,19 @@ public class AddCategoryActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 addCategoryToFirestore();
+            }
+        });
+
+        ImageButton btnBack = findViewById(R.id.btnBack);
+
+        // Handle Back Button Click
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Open CategoryActivity
+                Intent intent = new Intent(AddCategoryActivity.this, CategoryActivity.class);
+                startActivity(intent);
+                finish(); // Close current activity
             }
         });
     }

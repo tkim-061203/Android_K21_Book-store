@@ -1,22 +1,18 @@
 package com.example.do_an.ui_admin;
-
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
-import android.view.MenuItem;
-import android.widget.SearchView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.MenuItem;
+import android.widget.EditText;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.do_an.R;
-import com.example.do_an.ui_admin.AddCategoryActivity;
-import com.example.do_an.ui_admin.CategoryAdapter;
-import com.example.do_an.ui_user.CartActivity;
-import com.example.do_an.ui_user.ProfileActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.EventListener;
@@ -27,12 +23,12 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AdminActivity extends AppCompatActivity {
-    private SearchView searchView;
+public class CategoryActivity extends AppCompatActivity {
+    private EditText searchBox;
     private RecyclerView recyclerView;
     private CategoryAdapter categoryAdapter;
     private List<Category> categoryList = new ArrayList<>();
-    private List<Category> filteredList = new ArrayList<>(); // Danh sách đã lọc
+    private List<Category> filteredList = new ArrayList<>();
     private FirebaseFirestore db;
 
     @Override
@@ -40,28 +36,32 @@ public class AdminActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin);
 
-        searchView = findViewById(R.id.searchView);
+        // Ánh xạ UI
+        searchBox = findViewById(R.id.searchBox);
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         db = FirebaseFirestore.getInstance();
-
-        categoryAdapter = new CategoryAdapter(filteredList); // Dùng danh sách đã lọc
+        categoryAdapter = new CategoryAdapter(filteredList);
         recyclerView.setAdapter(categoryAdapter);
 
+        // Lấy danh sách thể loại từ Firestore
         fetchCategories();
+
+        // Lắng nghe sự kiện nhập vào EditText
         setupSearch();
 
-        FloatingActionButton buttonAddCategory = findViewById(R.id.button_AddCategory);
+        FloatingActionButton buttonAddProduct = findViewById(R.id.button_AddCategory);
 
-        buttonAddCategory.setOnClickListener(view -> {
-            Intent intent = new Intent(AdminActivity.this, AddCategoryActivity.class);
+        buttonAddProduct.setOnClickListener(view -> {
+            Intent intent = new Intent(CategoryActivity.this, AddCategoryActivity.class);
             startActivity(intent);
         });
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
         bottomNavigationView.setSelectedItemId(R.id.bottom_category);
 
+        // Using the OnItemSelectedListener correctly
         bottomNavigationView.setOnItemSelectedListener(new BottomNavigationView.OnItemSelectedListener() {
             @SuppressLint("NonConstantResourceId")
             @Override
@@ -70,7 +70,7 @@ public class AdminActivity extends AppCompatActivity {
                 if (itemId == R.id.bottom_category) {
                     return true;
                 } else if (itemId == R.id.bottom_book) {
-                    startActivity(new Intent(getApplicationContext(), Product.class));
+                    startActivity(new Intent(getApplicationContext(), ProductActivity.class));
                     overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                     finish();
                     return true;
@@ -106,31 +106,30 @@ public class AdminActivity extends AppCompatActivity {
                             categoryList.add(category);
                         }
                         filteredList.clear();
-                        filteredList.addAll(categoryList); // Cập nhật danh sách lọc ban đầu
+                        filteredList.addAll(categoryList);
                         categoryAdapter.notifyDataSetChanged();
                     }
                 });
     }
 
     private void setupSearch() {
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        searchBox.addTextChangedListener(new TextWatcher() {
             @Override
-            public boolean onQueryTextSubmit(String query) {
-                filterCategories(query);
-                return false;
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                filterCategories(s.toString());
             }
 
             @Override
-            public boolean onQueryTextChange(String newText) {
-                filterCategories(newText);
-                return false;
-            }
+            public void afterTextChanged(Editable s) {}
         });
     }
 
     private void filterCategories(String query) {
         filteredList.clear();
-        if (TextUtils.isEmpty(query)) {
+        if (query.isEmpty()) {
             filteredList.addAll(categoryList);
         } else {
             for (Category category : categoryList) {

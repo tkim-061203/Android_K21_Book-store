@@ -1,79 +1,37 @@
 package com.example.do_an.ui_admin;
 
-import android.annotation.SuppressLint;
-import android.content.Intent;
-import android.os.Bundle;
-import android.text.TextUtils;
-import android.view.MenuItem;
-import android.widget.SearchView;
-import android.util.Log;
+public class Product {
+    private String id;
+    private String name;
+    private String category;
+    private String imageUrl;
+    private double price;
 
-import androidx.activity.EdgeToEdge;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.example.do_an.R;
-import com.example.do_an.ui_admin.AddCategoryActivity;
-import com.example.do_an.ui_admin.CategoryAdapter;
-import com.example.do_an.ui_user.CartActivity;
-import com.example.do_an.ui_user.ProfileActivity;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-import java.util.ArrayList;
-import java.util.List;
-
-
-public class Product extends AppCompatActivity {
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_product);
-
-        FloatingActionButton buttonAddProduct = findViewById(R.id.button_AddProduct);
-
-        buttonAddProduct.setOnClickListener(view -> {
-            Intent intent = new Intent(Product.this, AddProductActivity.class);
-            startActivity(intent);
-        });
-
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
-        bottomNavigationView.setSelectedItemId(R.id.bottom_book);
-
-        // Using the OnItemSelectedListener correctly
-        bottomNavigationView.setOnItemSelectedListener(new BottomNavigationView.OnItemSelectedListener() {
-            @SuppressLint("NonConstantResourceId")
-            @Override
-            public boolean onNavigationItemSelected(MenuItem item) {
-                int itemId = item.getItemId();
-                if (itemId == R.id.bottom_category) {
-                    startActivity(new Intent(getApplicationContext(), AdminActivity.class));
-                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-                    finish();
-                    return true;
-                } else if (itemId == R.id.bottom_book) {
-                    return true;
-                } else if (itemId == R.id.bottom_order) {
-                    startActivity(new Intent(getApplicationContext(), OrderActivity.class));
-                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-                    finish();
-                    return true;
-                } else if (itemId == R.id.bottom_setting) {
-                    startActivity(new Intent(getApplicationContext(), Setting.class));
-                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-                    finish();
-                    return true;
-                }
-                return false;
-            }
-        });
+    // No-argument constructor required for Firestore deserialization
+    public Product() {
     }
+
+    public Product(String id, String name, String category, String imageUrl, double price) {
+        this.id = id;
+        this.name = name;
+        this.category = category;
+        this.imageUrl = imageUrl;
+        this.price = price;
+    }
+
+    // Getters and setters
+    public String getId() { return id; }
+    public void setId(String id) { this.id = id; }
+
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
+
+    public String getCategory() { return category; }
+    public void setCategory(String category) { this.category = category; }
+
+    public String getImageUrl() { return imageUrl; }
+    public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
+
+    public double getPrice() { return price; }
+    public void setPrice(double price) { this.price = price; }
 }
