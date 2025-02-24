@@ -56,9 +56,11 @@ public class ProfileActivity extends AppCompatActivity {
         });
 
         // Xử lý khi nhấn vào nút "Đổi mật khẩu"
-//        btnChangePassword.setOnClickListener(v -> {
-//            startActivity(new Intent(ProfileActivity.this, ChangePasswordActivity.class));
-//        });
+        btnChangePassword.setOnClickListener(v -> {
+            Intent intent = new Intent(ProfileActivity.this, ChangePasswordActivity.class);
+            startActivity(intent);
+        });
+
 
         // Xử lý khi nhấn vào nút "Đăng xuất"
         btnLogout.setOnClickListener(v -> {
