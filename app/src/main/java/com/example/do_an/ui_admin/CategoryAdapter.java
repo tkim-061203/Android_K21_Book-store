@@ -3,6 +3,7 @@ package com.example.do_an.ui_admin;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,10 +14,12 @@ import com.example.do_an.ui_admin.Category;
 import java.util.List;
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHolder> {
+    private final OnCategoryClickListener listener;
     private List<Category> categoryList;
 
-    public CategoryAdapter(List<Category> categoryList) {
+    public CategoryAdapter(List<Category> categoryList, OnCategoryClickListener listener) {
         this.categoryList = categoryList;
+        this.listener = listener;
     }
 
     @NonNull
@@ -39,10 +42,17 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView categoryName;
+        ImageButton deleteButton;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             categoryName = itemView.findViewById(R.id.categoryName);
+            deleteButton = itemView.findViewById(R.id.deleteButton);
         }
+
+    }
+    public interface OnCategoryClickListener {
+
+        void onDeleteClick(Category category);
     }
 }

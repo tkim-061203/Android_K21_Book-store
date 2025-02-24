@@ -1,12 +1,13 @@
 package com.example.do_an.ui_admin;
-import android.annotation.SuppressLint;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.MenuItem;
 import android.widget.EditText;
+import android.widget.Toast;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -20,6 +21,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,73 +38,75 @@ public class CategoryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin);
 
-        // Ánh xạ UI
+        // Initialize UI components
         searchBox = findViewById(R.id.searchBox);
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         db = FirebaseFirestore.getInstance();
-        categoryAdapter = new CategoryAdapter(filteredList);
+        categoryAdapter = new CategoryAdapter(filteredList, new CategoryAdapter.OnCategoryClickListener() {
+            @Override
+            public void onDeleteClick(Category category) {
+                deleteCategoryFromFirestore(category.getId());  // Now passing the category ID
+            }
+        });
+
         recyclerView.setAdapter(categoryAdapter);
 
-        // Lấy danh sách thể loại từ Firestore
-        fetchCategories();
+        fetchCategories();  // Fetch categories from Firestore
 
-        // Lắng nghe sự kiện nhập vào EditText
-        setupSearch();
+        setupSearch();  // Setup search functionality
 
-        FloatingActionButton buttonAddProduct = findViewById(R.id.button_AddCategory);
-
-        buttonAddProduct.setOnClickListener(view -> {
+        // Add Category Button
+        FloatingActionButton buttonAddCategory = findViewById(R.id.button_AddCategory);
+        buttonAddCategory.setOnClickListener(view -> {
             Intent intent = new Intent(CategoryActivity.this, AddCategoryActivity.class);
             startActivity(intent);
         });
 
+        // Bottom Navigation
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
         bottomNavigationView.setSelectedItemId(R.id.bottom_category);
 
-        // Using the OnItemSelectedListener correctly
-        bottomNavigationView.setOnItemSelectedListener(new BottomNavigationView.OnItemSelectedListener() {
-            @SuppressLint("NonConstantResourceId")
-            @Override
-            public boolean onNavigationItemSelected(MenuItem item) {
-                int itemId = item.getItemId();
-                if (itemId == R.id.bottom_category) {
-                    return true;
-                } else if (itemId == R.id.bottom_book) {
-                    startActivity(new Intent(getApplicationContext(), ProductActivity.class));
-                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-                    finish();
-                    return true;
-                } else if (itemId == R.id.bottom_order) {
-                    startActivity(new Intent(getApplicationContext(), OrderActivity.class));
-                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-                    finish();
-                    return true;
-                } else if (itemId == R.id.bottom_setting) {
-                    startActivity(new Intent(getApplicationContext(), Setting.class));
-                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-                    finish();
-                    return true;
-                }
-                return false;
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            int itemId = item.getItemId();
+            if (itemId == R.id.bottom_category) {
+                return true;
+            } else if (itemId == R.id.bottom_book) {
+                startActivity(new Intent(getApplicationContext(), ProductActivity.class));
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                finish();
+                return true;
+            } else if (itemId == R.id.bottom_order) {
+                startActivity(new Intent(getApplicationContext(), OrderActivity.class));
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                finish();
+                return true;
+            } else if (itemId == R.id.bottom_setting) {
+                startActivity(new Intent(getApplicationContext(), Setting.class));
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                finish();
+                return true;
             }
+            return false;
         });
     }
 
+    // Fetch categories from Firestore
     private void fetchCategories() {
         db.collection("categories")
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                         if (e != null) {
-                            Log.e("Firestore", "Lỗi khi lấy danh mục", e);
+                            Log.e("Firestore", "Error fetching categories", e);
                             return;
                         }
 
                         categoryList.clear();
                         for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
                             Category category = doc.toObject(Category.class);
+                            category.setId(doc.getId());  // Ensure you are adding the document ID
                             categoryList.add(category);
                         }
                         filteredList.clear();
@@ -112,6 +116,7 @@ public class CategoryActivity extends AppCompatActivity {
                 });
     }
 
+    // Setup search functionality
     private void setupSearch() {
         searchBox.addTextChangedListener(new TextWatcher() {
             @Override
@@ -127,6 +132,7 @@ public class CategoryActivity extends AppCompatActivity {
         });
     }
 
+    // Filter categories based on search input
     private void filterCategories(String query) {
         filteredList.clear();
         if (query.isEmpty()) {
@@ -139,5 +145,18 @@ public class CategoryActivity extends AppCompatActivity {
             }
         }
         categoryAdapter.notifyDataSetChanged();
+    }
+
+    // Delete category from Firestore
+    private void deleteCategoryFromFirestore(String categoryId) {
+        db.collection("categories").document(categoryId)
+                .delete()
+                .addOnSuccessListener(aVoid -> {
+                    Toast.makeText(CategoryActivity.this, "Category deleted successfully!", Toast.LENGTH_SHORT).show();
+                    fetchCategories();  // Re-fetch categories after deletion
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(CategoryActivity.this, "Error deleting category: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                });
     }
 }

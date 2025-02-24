@@ -37,7 +37,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         Product product = productList.get(position);
         holder.productTitle.setText(product.getName());
         holder.productPrice.setText(product.getPrice() + " VND");
-        holder.productCategory.setText("Thể loại: " + product.getCategory());
+        holder.productCategory.setText("Caterogy: " + product.getCategory());
 
         // Load ảnh sản phẩm bằng Glide
         Glide.with(context)
@@ -45,8 +45,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
                 .placeholder(R.drawable.baseline_image_24)
                 .into(holder.productImage);
 
-        // Xử lý sự kiện bấm nút
-        holder.editButton.setOnClickListener(view -> listener.onEditClick(product));
         holder.deleteButton.setOnClickListener(view -> listener.onDeleteClick(product));
     }
 
@@ -58,7 +56,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView productImage;
         TextView productTitle, productPrice, productCategory;
-        ImageButton editButton, deleteButton;
+        ImageButton deleteButton;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -66,13 +64,11 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             productTitle = itemView.findViewById(R.id.productTitle);
             productPrice = itemView.findViewById(R.id.productPrice);
             productCategory = itemView.findViewById(R.id.productCategory);
-            editButton = itemView.findViewById(R.id.editButton);
             deleteButton = itemView.findViewById(R.id.deleteButton);
         }
     }
 
     public interface OnProductClickListener {
-        void onEditClick(Product product);
         void onDeleteClick(Product product);
     }
 }

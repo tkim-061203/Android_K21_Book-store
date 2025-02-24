@@ -3,7 +3,10 @@ package com.example.do_an.ui_admin;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -25,8 +28,10 @@ import java.util.List;
 
 public class ProductActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
+    private EditText searchBox;
     private ProductAdapter productAdapter;
-    private List<Product> productList;
+    private List<Product> productList = new ArrayList<>();
+    private List<Product> filteredList = new ArrayList<>();
     private FirebaseFirestore db;
 
     @Override
@@ -35,14 +40,12 @@ public class ProductActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_product);
 
-        // FloatingActionButton để thêm sản phẩm
         FloatingActionButton buttonAddProduct = findViewById(R.id.button_AddProduct);
         buttonAddProduct.setOnClickListener(view -> {
             Intent intent = new Intent(ProductActivity.this, AddProductActivity.class);
             startActivity(intent);
         });
 
-        // Kết nối Firebase Firestore
         db = FirebaseFirestore.getInstance();
 
         // Cấu hình RecyclerView
@@ -50,12 +53,6 @@ public class ProductActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         productList = new ArrayList<>();
         productAdapter = new ProductAdapter(this, productList, new ProductAdapter.OnProductClickListener() {
-            @Override
-            public void onEditClick(Product product) {
-                // Xử lý chỉnh sửa sản phẩm
-                Toast.makeText(ProductActivity.this, "Edit: " + product.getName(), Toast.LENGTH_SHORT).show();
-            }
-
             @Override
             public void onDeleteClick(Product product) {
                 // Xử lý xóa sản phẩm khỏi Firestore
@@ -67,7 +64,7 @@ public class ProductActivity extends AppCompatActivity {
 
         // Lấy dữ liệu sản phẩm từ Firestore
         fetchProductsFromFirestore();
-
+        setupSearch();
         // Cấu hình BottomNavigationView
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
         bottomNavigationView.setSelectedItemId(R.id.bottom_book);
@@ -130,5 +127,36 @@ public class ProductActivity extends AppCompatActivity {
                     productAdapter.notifyDataSetChanged();
                 })
                 .addOnFailureListener(e -> Toast.makeText(ProductActivity.this, "Error detele product", Toast.LENGTH_SHORT).show());
+    }
+
+    // Setup the search box functionality
+    private void setupSearch() {
+        searchBox.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                filterProducts(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+    }
+
+    // Filter products based on the search query
+    private void filterProducts(String query) {
+        filteredList.clear();
+        if (query.isEmpty()) {
+            filteredList.addAll(productList);
+        } else {
+            for (Product product : productList) {
+                if (product.getName().toLowerCase().contains(query.toLowerCase())) {
+                    filteredList.add(product);
+                }
+            }
+        }
+        productAdapter.notifyDataSetChanged();
     }
 }
