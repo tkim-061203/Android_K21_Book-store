@@ -1,8 +1,10 @@
 package com.example.do_an.ui_admin;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.MenuItem;
 import android.widget.SearchView;
 import android.util.Log;
 import androidx.annotation.Nullable;
@@ -13,6 +15,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.do_an.R;
 import com.example.do_an.ui_admin.AddCategoryActivity;
 import com.example.do_an.ui_admin.CategoryAdapter;
+import com.example.do_an.ui_user.CartActivity;
+import com.example.do_an.ui_user.ProfileActivity;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -52,6 +57,36 @@ public class AdminActivity extends AppCompatActivity {
         buttonAddCategory.setOnClickListener(view -> {
             Intent intent = new Intent(AdminActivity.this, AddCategoryActivity.class);
             startActivity(intent);
+        });
+
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
+        bottomNavigationView.setSelectedItemId(R.id.bottom_category);
+
+        bottomNavigationView.setOnItemSelectedListener(new BottomNavigationView.OnItemSelectedListener() {
+            @SuppressLint("NonConstantResourceId")
+            @Override
+            public boolean onNavigationItemSelected(MenuItem item) {
+                int itemId = item.getItemId();
+                if (itemId == R.id.bottom_category) {
+                    return true;
+                } else if (itemId == R.id.bottom_book) {
+                    startActivity(new Intent(getApplicationContext(), Product.class));
+                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                    finish();
+                    return true;
+                } else if (itemId == R.id.bottom_order) {
+                    startActivity(new Intent(getApplicationContext(), OrderActivity.class));
+                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                    finish();
+                    return true;
+                } else if (itemId == R.id.bottom_setting) {
+                    startActivity(new Intent(getApplicationContext(), Setting.class));
+                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                    finish();
+                    return true;
+                }
+                return false;
+            }
         });
     }
 

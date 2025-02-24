@@ -25,7 +25,6 @@
         android:id="@+id/searchView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:queryHint="Tìm kiếm danh mục..."
         android:background="@android:color/white"
         android:padding="8dp"
         android:elevation="2dp"
@@ -45,9 +44,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/bottomNavigation"/>
 
-    <!-- Floating Action Button -->
-
-    <!-- BottomNavigationView -->
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/button_AddCategory"
