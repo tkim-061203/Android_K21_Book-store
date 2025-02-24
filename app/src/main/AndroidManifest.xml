@@ -16,9 +16,26 @@
             android:name=".ui_admin.AddCategoryActivity"
             android:exported="false" />
         <activity
+            android:name=".ui_admin.AddProductActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui_admin.OrderActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui_admin.Product"
+            android:exported="false" />
+        <activity
+            android:name=".ui_admin.Setting"
+            android:exported="false" />
+        <activity
             android:name=".ui_admin.AdminActivity"
             android:exported="false" />
-
+        <activity
+            android:name=".ui_user.EditProfile"
+            android:exported="false" />
+        <activity
+            android:name=".ui_user.ChangePasswordActivity"
+            android:exported="false" />
         <activity
             android:name=".ui_user.ProfileActivity"
             android:exported="false" />
@@ -43,6 +60,9 @@
             android:exported="false" />
         <activity
             android:name=".ui_user.MainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui_user.CartActivity"
             android:exported="false" />
     </application>
 
