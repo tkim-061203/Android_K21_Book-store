@@ -10,7 +10,9 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true">
+        android:fillViewport="true"
+        android:clipToPadding="false"
+        android:paddingBottom="80dp">>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -44,12 +46,25 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layoutManager="com.google.android.material.carousel.CarouselLayoutManager"/>
 
+        <!-- Suggested Text -->
+        <TextView
+            android:id="@+id/suggestedText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="Có thể bạn sẽ thích"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:textColor="@android:color/black"/>
+
         <!-- Bookstore Section -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerBooks"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:layout_marginBottom="80dp"
             android:padding="8dp"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:spanCount="3"

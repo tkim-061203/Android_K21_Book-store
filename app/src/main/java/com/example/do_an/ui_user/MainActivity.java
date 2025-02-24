@@ -30,11 +30,11 @@ public class MainActivity extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.recycler);
         ArrayList<String> arrayList = new ArrayList<>();
 
-        arrayList.add("https://images.unsplash.com/photo-1692528131755-d4e366b2adf0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwzNXx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=60");
-        arrayList.add("https://images.unsplash.com/photo-1692862582645-3b6fd47b7513?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw0MXx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=60");
-        arrayList.add("https://images.unsplash.com/photo-1692584927805-d4096552a5ba?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw0Nnx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=60");
-        arrayList.add("https://images.unsplash.com/photo-1692854236272-cc49076a2629?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw1MXx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=60");
-        arrayList.add("https://images.unsplash.com/photo-1681207751526-a091f2c6a538?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyODF8fHxlbnwwfHx8fHw%3D&auto=format&fit=crop&w=500&q=60");
+        arrayList.add("https://cogaihu.com/wp-content/uploads/2024/09/458789789_478113745044766_3570699670058121927_n.jpg?w=816");
+        arrayList.add("https://bizweb.dktcdn.net/100/376/170/themes/750292/assets/slider_2.jpg?1693887815786");
+        arrayList.add("https://thietkelogo.edu.vn/uploads/images/thiet-ke-do-hoa-khac/banner-sach/1.png");
+        arrayList.add("https://newshop.vn/public/uploads/news/nhung-cuon-sach-van-hoc-hay.jpg");
+        arrayList.add("https://interfaceingame.com/wp-content/uploads/need-for-speed-heat/need-for-speed-heat-banner.jpg");
         arrayList.add("https://images.unsplash.com/photo-1692610365998-c628604f5d9f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyODZ8fHxlbnwwfHx8fHw%3D&auto=format&fit=crop&w=500&q=60");
 
         ImageAdapter adapter = new ImageAdapter(MainActivity.this, arrayList);

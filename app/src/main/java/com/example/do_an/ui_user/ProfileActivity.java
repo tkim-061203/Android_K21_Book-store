@@ -18,6 +18,8 @@ import com.bumptech.glide.Glide;
 import com.example.do_an.R;
 import com.example.do_an.ui_login.LoginActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 
@@ -29,6 +31,8 @@ public class ProfileActivity extends AppCompatActivity {
     private Button btnEditProfile, btnChangePassword, btnLogout;
     private BookAdapter bookAdapter;
     private ArrayList<Book> bookList;
+    private FirebaseAuth mAuth;
+    private FirebaseUser currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,9 +49,18 @@ public class ProfileActivity extends AppCompatActivity {
         btnLogout = findViewById(R.id.btn_logout);
 
         // Cập nhật thông tin người dùng (Dữ liệu mẫu)
-        profileName.setText("Nguyễn Ngọc Minh Trí");
-        profileEmail.setText("tri@example.com");
-        Glide.with(this).load("https://example.com/avatar.jpg").into(profileImage);
+        mAuth = FirebaseAuth.getInstance();
+        currentUser = mAuth.getCurrentUser();
+
+        if (currentUser != null) {
+            String email = currentUser.getEmail();
+            profileEmail.setText(email);
+        } else {
+            profileEmail.setText("Chưa đăng nhập");
+        }
+//        profileName.setText("Nguyễn Ngọc Minh Trí");
+//        profileEmail.setText("tri@example.com");
+//        Glide.with(this).load("https://example.com/avatar.jpg").into(profileImage);
 
         // Xử lý khi nhấn vào nút "Chỉnh sửa hồ sơ"
         btnEditProfile.setOnClickListener(v -> {

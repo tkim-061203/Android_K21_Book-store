@@ -11,11 +11,9 @@
         android:id="@+id/recyclerCart"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-
         android:layout_marginBottom="60dp"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/cartSummary"
-        app:layoutManager="linearLayoutManager" />
+        app:layout_constraintBottom_toTopOf="@+id/cartSummary"/>
 
     <!-- Tổng tiền & nút Thanh toán -->
     <LinearLayout
