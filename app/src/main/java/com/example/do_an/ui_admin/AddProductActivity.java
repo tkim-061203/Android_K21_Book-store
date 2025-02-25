@@ -28,7 +28,7 @@ public class AddProductActivity extends AppCompatActivity {
     private Button btnAddProduct;
     private FirebaseFirestore db;
     private ArrayAdapter<String> categoryAdapter;
-    private List<String> categoryList;  // List to store categories
+    private List<String> categoryList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

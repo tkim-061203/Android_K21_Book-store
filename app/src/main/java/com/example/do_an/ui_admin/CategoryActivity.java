@@ -49,6 +49,12 @@ public class CategoryActivity extends AppCompatActivity {
             public void onDeleteClick(Category category) {
                 deleteCategoryFromFirestore(category.getId());  // Now passing the category ID
             }
+
+            @Override
+            public void onUpdateClick(Category category) {
+                updateCategory(category);
+            }
+
         });
 
         recyclerView.setAdapter(categoryAdapter);
@@ -159,4 +165,14 @@ public class CategoryActivity extends AppCompatActivity {
                     Toast.makeText(CategoryActivity.this, "Error deleting category: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
     }
+
+
+    private void updateCategory(Category category) {
+        Intent intent = new Intent(CategoryActivity.this, UpdateCategoryActivity.class);
+        intent.putExtra("category_id", category.getId());
+        intent.putExtra("category_name", category.getName());
+
+        startActivity(intent);
+    }
+
 }

@@ -33,6 +33,11 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Category category = categoryList.get(position);
         holder.categoryName.setText(category.getName());
+
+        holder.deleteButton.setOnClickListener(view -> listener.onDeleteClick(category));
+
+
+        holder.updateButton.setOnClickListener(view -> listener.onUpdateClick(category));
     }
 
     @Override
@@ -42,17 +47,19 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView categoryName;
-        ImageButton deleteButton;
+        ImageButton deleteButton, updateButton;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             categoryName = itemView.findViewById(R.id.categoryName);
             deleteButton = itemView.findViewById(R.id.deleteButton);
+            updateButton = itemView.findViewById(R.id.updateButton);
         }
 
     }
     public interface OnCategoryClickListener {
 
         void onDeleteClick(Category category);
+        void onUpdateClick(Category category);
     }
 }

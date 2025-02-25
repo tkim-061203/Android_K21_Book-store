@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -51,13 +52,12 @@ public class ProductActivity extends AppCompatActivity {
         productAdapter = new ProductAdapter(this, filteredList, new ProductAdapter.OnProductClickListener() {
             @Override
             public void onDeleteClick(Product product) {
-                // Handle delete action (you can add your delete logic here)
-                Toast.makeText(ProductActivity.this, "Product deleted: " + product.getName(), Toast.LENGTH_SHORT).show();
                 deleteProduct(product);  // Call deleteProduct when delete button is clicked
             }
 
             @Override
             public void onUpdateClick(Product product) {
+                Log.d("UpdateProductActivity", "Updating product with ID: " + product.getId());
                 updateProduct(product);
             }
         });
@@ -114,7 +114,7 @@ public class ProductActivity extends AppCompatActivity {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         db.collection("products")
-                .get()  // Get all products in the collection
+                .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         productList.clear();
@@ -122,6 +122,7 @@ public class ProductActivity extends AppCompatActivity {
 
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             Product product = document.toObject(Product.class);
+                            product.setId(document.getId());
                             productList.add(product);
                             filteredList.add(product);
                         }
@@ -173,7 +174,14 @@ public class ProductActivity extends AppCompatActivity {
         fetchProducts();
     }
     private void deleteProduct(Product product) {
-        // Delete product from Firestore
+        if (product == null || product.getId() == null) {
+            Toast.makeText(ProductActivity.this, "Product not found", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        // Attempt to delete the product from Firestore
         db.collection("products").document(product.getId())  // Use the product's id to identify the document
                 .delete()
                 .addOnSuccessListener(aVoid -> {
@@ -190,6 +198,7 @@ public class ProductActivity extends AppCompatActivity {
                     Toast.makeText(ProductActivity.this, "Error deleting product: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
     }
+
 
     private void updateProduct(Product product) {
         Intent intent = new Intent(ProductActivity.this, UpdateProductActivity.class);
