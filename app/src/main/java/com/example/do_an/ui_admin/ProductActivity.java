@@ -8,71 +8,79 @@ import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Toast;
-import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.do_an.R;
-import com.example.do_an.ui_admin.ProductAdapter;
-import com.example.do_an.ui_admin.Product;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ProductActivity extends AppCompatActivity {
-    private RecyclerView recyclerView;
-    private EditText searchBox;
+
+    private EditText searchBox;  // Search EditText
+    private RecyclerView recyclerView;  // RecyclerView for displaying products
     private ProductAdapter productAdapter;
-    private List<Product> productList = new ArrayList<>();
-    private List<Product> filteredList = new ArrayList<>();
-    private FirebaseFirestore db;
+    private List<Product> productList;  // List of all products
+    private List<Product> filteredList;  // List for filtered products based on search query
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_product);
 
+        // Initialize RecyclerView
+        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        // Initialize the product lists
+        productList = new ArrayList<>();
+        filteredList = new ArrayList<>();
+
+        // Initialize the search box
+        searchBox = findViewById(R.id.searchBox);
+
+        // Initialize ProductAdapter with filteredList
+        productAdapter = new ProductAdapter(this, filteredList, new ProductAdapter.OnProductClickListener() {
+            @Override
+            public void onDeleteClick(Product product) {
+                // Handle delete action (you can add your delete logic here)
+                Toast.makeText(ProductActivity.this, "Product deleted: " + product.getName(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // Set the adapter to RecyclerView
+        recyclerView.setAdapter(productAdapter);
+
+        // Fetch all products and update filteredList
+        fetchProducts();
+
+        // Set up the search functionality
+        setupSearch();
+
         FloatingActionButton buttonAddProduct = findViewById(R.id.button_AddProduct);
+
         buttonAddProduct.setOnClickListener(view -> {
             Intent intent = new Intent(ProductActivity.this, AddProductActivity.class);
             startActivity(intent);
         });
 
-        db = FirebaseFirestore.getInstance();
-
-        // Cấu hình RecyclerView
-        recyclerView = findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        productList = new ArrayList<>();
-        productAdapter = new ProductAdapter(this, productList, new ProductAdapter.OnProductClickListener() {
-            @Override
-            public void onDeleteClick(Product product) {
-                // Xử lý xóa sản phẩm khỏi Firestore
-                deleteProductFromFirestore(product);
-            }
-        });
-
-        recyclerView.setAdapter(productAdapter);
-
-        // Lấy dữ liệu sản phẩm từ Firestore
-        fetchProductsFromFirestore();
-//        setupSearch();
-        // Cấu hình BottomNavigationView
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
         bottomNavigationView.setSelectedItemId(R.id.bottom_book);
 
+        // Using the OnItemSelectedListener correctly
         bottomNavigationView.setOnItemSelectedListener(new BottomNavigationView.OnItemSelectedListener() {
             @SuppressLint("NonConstantResourceId")
             @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            public boolean onNavigationItemSelected(MenuItem item) {
                 int itemId = item.getItemId();
                 if (itemId == R.id.bottom_category) {
                     startActivity(new Intent(getApplicationContext(), CategoryActivity.class));
@@ -95,68 +103,74 @@ public class ProductActivity extends AppCompatActivity {
                 return false;
             }
         });
+
+
     }
 
-    private void fetchProductsFromFirestore() {
+    // Method to fetch all products from Firestore
+    private void fetchProducts() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        // Fetch products from Firestore (assuming collection name is "products")
         db.collection("products")
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                    @Override
-                    public void onEvent(QuerySnapshot queryDocumentSnapshots, FirebaseFirestoreException e) {
-                        if (e != null) {
-                            Toast.makeText(ProductActivity.this, "Error fetching products!", Toast.LENGTH_SHORT).show();
-                            return;
+                .get()  // Get all products in the collection
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        // Clear the filteredList and productList to avoid duplicates
+                        productList.clear();
+                        filteredList.clear();
+
+                        // Iterate over the documents returned from Firestore
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            // Map Firestore document to Product object
+                            Product product = document.toObject(Product.class);
+                            productList.add(product);  // Add product to the list
+
+                            // Add the product to the filtered list initially (before search filtering)
+                            filteredList.add(product);
                         }
 
-                        productList.clear();
-                        for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                            Product product = doc.toObject(Product.class);
-                            product.setId(doc.getId()); // Gán ID Firestore
-                            productList.add(product);
-                        }
+                        // Notify adapter that data has changed and needs to be displayed
                         productAdapter.notifyDataSetChanged();
+                    } else {
+                        // Log the error in case of failure
+                        Toast.makeText(ProductActivity.this, "Error getting products: " + task.getException(), Toast.LENGTH_SHORT).show();
                     }
                 });
     }
 
-    private void deleteProductFromFirestore(Product product) {
-        db.collection("products").document(product.getId())
-                .delete()
-                .addOnSuccessListener(aVoid -> {
-                    Toast.makeText(ProductActivity.this, "Delete complete the product", Toast.LENGTH_SHORT).show();
-                    productList.remove(product);
-                    productAdapter.notifyDataSetChanged();
-                })
-                .addOnFailureListener(e -> Toast.makeText(ProductActivity.this, "Error detele product", Toast.LENGTH_SHORT).show());
+    // Setup the search functionality
+    private void setupSearch() {
+        searchBox.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                filterProducts(s.toString());  // Filter products as the user types
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
     }
 
-    // Setup the search box functionality
-//    private void setupSearch() {
-//        searchBox.addTextChangedListener(new TextWatcher() {
-//            @Override
-//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-//
-//            @Override
-//            public void onTextChanged(CharSequence s, int start, int before, int count) {
-//                filterProducts(s.toString());
-//            }
-//
-//            @Override
-//            public void afterTextChanged(Editable s) {}
-//        });
-//    }
-//
-//    // Filter products based on the search query
-//    private void filterProducts(String query) {
-//        filteredList.clear();
-//        if (query.isEmpty()) {
-//            filteredList.addAll(productList);
-//        } else {
-//            for (Product product : productList) {
-//                if (product.getName().toLowerCase().contains(query.toLowerCase())) {
-//                    filteredList.add(product);
-//                }
-//            }
-//        }
-//        productAdapter.notifyDataSetChanged();
-//    }
+    // Filter products based on the search query
+    private void filterProducts(String query) {
+        filteredList.clear();  // Clear the filtered list before adding new results
+
+        if (query.isEmpty()) {
+            filteredList.addAll(productList);  // If search is empty, show all products
+        } else {
+            for (Product product : productList) {
+                // Check if the product name contains the query, case insensitive
+                if (product.getName().toLowerCase().contains(query.toLowerCase())) {
+                    filteredList.add(product);  // Add matching products to filtered list
+                }
+            }
+        }
+
+        // Notify the adapter that the data has changed
+        productAdapter.notifyDataSetChanged();
+    }
 }

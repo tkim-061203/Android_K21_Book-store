@@ -36,6 +36,20 @@
             android:layout_toEndOf="@id/productImage"
             android:layout_alignParentTop="true"/>
 
+        <TextView
+            android:id="@+id/productAuthor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Author"
+            android:layout_marginTop="22dp"
+            android:textSize="16sp"
+            android:textStyle="italic"
+            android:textColor="@android:color/black"
+            android:layout_marginStart="12dp"
+            android:layout_below="@id/productTitle"
+            android:layout_toEndOf="@id/productImage"
+            android:layout_alignParentTop="true"/>
+
         <!-- Giá sản phẩm -->
         <TextView
             android:id="@+id/productPrice"
@@ -47,7 +61,7 @@
             android:textColor="@android:color/holo_red_dark"
             android:layout_marginStart="12dp"
             android:layout_toEndOf="@id/productImage"
-            android:layout_below="@id/productTitle"/>
+            android:layout_below="@id/productAuthor"/>
 
         <!-- Thể loại sản phẩm -->
         <TextView

@@ -52,7 +52,7 @@ public class Setting extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
         adminEmailTextView = findViewById(R.id.profile_email);
-        logoutButton = findViewById(R.id.btnLogout);
+        logoutButton = findViewById(R.id.btn_logout);
 
         if (currentUser != null) {
             String email = currentUser.getEmail();
