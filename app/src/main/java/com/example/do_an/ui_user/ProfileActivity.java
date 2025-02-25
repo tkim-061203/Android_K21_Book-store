@@ -16,10 +16,16 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.do_an.R;
+import com.example.do_an.ui_login.HelperClass;
 import com.example.do_an.ui_login.LoginActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -38,29 +44,50 @@ public class ProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-
-        // Ánh xạ UI
         profileImage = findViewById(R.id.profile_image);
         profileName = findViewById(R.id.profile_name);
         profileEmail = findViewById(R.id.profile_email);
-        rvBooksPurchased = findViewById(R.id.rv_books_purchased);
+
         btnEditProfile = findViewById(R.id.btn_edit_profile);
         btnChangePassword = findViewById(R.id.btn_change_password);
         btnLogout = findViewById(R.id.btn_logout);
 
-        // Cập nhật thông tin người dùng (Dữ liệu mẫu)
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
 
+
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser != null) {
-            String email = currentUser.getEmail();
-            profileEmail.setText(email);
+            String userId = currentUser.getUid();
+
+            // Retrieve the user data from Firebase Realtime Database
+            DatabaseReference database = FirebaseDatabase.getInstance().getReference();
+            database.child("users").child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        HelperClass userHelper = dataSnapshot.getValue(HelperClass.class);
+                        if (userHelper != null) {
+                            // Use the retrieved data
+                            String name = userHelper.getName();
+                            String email = userHelper.getEmail();
+
+                            // Update UI with retrieved data
+                            profileName.setText(name);
+                            profileEmail.setText(email);
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
         } else {
-            profileEmail.setText("Chưa đăng nhập");
+            profileEmail.setText("Not login account");
         }
-//        profileName.setText("Nguyễn Ngọc Minh Trí");
-//        profileEmail.setText("tri@example.com");
-//        Glide.with(this).load("https://example.com/avatar.jpg").into(profileImage);
+
 
         // Xử lý khi nhấn vào nút "Chỉnh sửa hồ sơ"
         btnEditProfile.setOnClickListener(v -> {

@@ -3,6 +3,7 @@ package com.example.do_an.ui_admin;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -14,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.annotation.NonNull;
 
 import com.example.do_an.R;
+import com.example.do_an.ui_login.HelperClass;
 import com.example.do_an.ui_login.LoginActivity;
 import com.example.do_an.ui_user.Book;
 import com.example.do_an.ui_user.BookAdapter;
@@ -23,6 +25,11 @@ import com.example.do_an.ui_user.ProfileActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -41,40 +48,60 @@ public class Setting extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_setting);
 
-        // Ánh xạ UI
         profileImage = findViewById(R.id.profile_image);
         profileName = findViewById(R.id.profile_name);
+        profileEmail = findViewById(R.id.profile_email);
+
         btnEditProfile = findViewById(R.id.btn_edit_profile);
         btnChangePassword = findViewById(R.id.btn_change_password);
         btnLogout = findViewById(R.id.btn_logout);
 
-        // Cập nhật thông tin người dùng (Dữ liệu mẫu)
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
-        adminEmailTextView = findViewById(R.id.profile_email);
-        logoutButton = findViewById(R.id.btn_logout);
 
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser != null) {
-            String email = currentUser.getEmail();
-            adminEmailTextView.setText(email);
+            String userId = currentUser.getUid();
+
+            // Retrieve the user data from Firebase Realtime Database
+            DatabaseReference database = FirebaseDatabase.getInstance().getReference();
+            database.child("users").child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        HelperClass userHelper = dataSnapshot.getValue(HelperClass.class);
+                        if (userHelper != null) {
+                            // Use the retrieved data
+                            String name = userHelper.getName();
+                            String email = userHelper.getEmail();
+
+                            // Update UI with retrieved data
+                            profileName.setText(name);
+                            profileEmail.setText(email);
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
         } else {
-            adminEmailTextView.setText("Chưa đăng nhập");
+            adminEmailTextView.setText("Not login account");
         }
 
-        // Xử lý khi nhấn vào nút "Chỉnh sửa hồ sơ"
         btnEditProfile.setOnClickListener(v -> {
             Intent intent = new Intent(Setting.this, EditProfile.class);
-            startActivityForResult(intent, 2);
+            startActivity(intent);
         });
 
-        // Xử lý khi nhấn vào nút "Đổi mật khẩu"
         btnChangePassword.setOnClickListener(v -> {
             Intent intent = new Intent(Setting.this, ChangePasswordActivity.class);
             startActivity(intent);
         });
 
 
-        // Xử lý khi nhấn vào nút "Đăng xuất"
         btnLogout.setOnClickListener(v -> {
             Intent intent = new Intent(Setting.this, LoginActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
