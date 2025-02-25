@@ -16,7 +16,6 @@ import com.example.do_an.R;
 
 import java.text.DecimalFormat;
 import java.util.List;
-
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHolder> {
     private Context context;
     private List<Product> productList;
@@ -71,6 +70,9 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
         // Set the delete button click listener
         holder.deleteButton.setOnClickListener(view -> listener.onDeleteClick(product));
+
+        // Set the update button click listener (assuming you have an "Update" button in item_product layout)
+        holder.updateButton.setOnClickListener(view -> listener.onUpdateClick(product));
     }
 
     @Override
@@ -81,7 +83,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView productImage;
         TextView productTitle, productPrice, productCategory, productAuthor;
-        ImageButton deleteButton;
+        ImageButton deleteButton, updateButton;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -91,10 +93,14 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             productCategory = itemView.findViewById(R.id.productCategory);
             productAuthor = itemView.findViewById(R.id.productAuthor);
             deleteButton = itemView.findViewById(R.id.deleteButton);
+            updateButton = itemView.findViewById(R.id.updateButton);  // Assuming this button exists in the layout
         }
     }
 
     public interface OnProductClickListener {
-        void onDeleteClick(Product product);  // Method for handling the delete click
+
+        void onDeleteClick(Product product);
+
+        void onUpdateClick(Product product);  // Method for handling the update click
     }
 }

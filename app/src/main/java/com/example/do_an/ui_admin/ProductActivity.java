@@ -18,9 +18,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +29,7 @@ public class ProductActivity extends AppCompatActivity {
     private ProductAdapter productAdapter;
     private List<Product> productList;  // List of all products
     private List<Product> filteredList;  // List for filtered products based on search query
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +53,12 @@ public class ProductActivity extends AppCompatActivity {
             public void onDeleteClick(Product product) {
                 // Handle delete action (you can add your delete logic here)
                 Toast.makeText(ProductActivity.this, "Product deleted: " + product.getName(), Toast.LENGTH_SHORT).show();
+                deleteProduct(product);  // Call deleteProduct when delete button is clicked
+            }
+
+            @Override
+            public void onUpdateClick(Product product) {
+                updateProduct(product);
             }
         });
 
@@ -66,17 +71,16 @@ public class ProductActivity extends AppCompatActivity {
         // Set up the search functionality
         setupSearch();
 
+        // Add Product Button
         FloatingActionButton buttonAddProduct = findViewById(R.id.button_AddProduct);
-
         buttonAddProduct.setOnClickListener(view -> {
             Intent intent = new Intent(ProductActivity.this, AddProductActivity.class);
             startActivity(intent);
         });
 
+        // Bottom Navigation
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
         bottomNavigationView.setSelectedItemId(R.id.bottom_book);
-
-        // Using the OnItemSelectedListener correctly
         bottomNavigationView.setOnItemSelectedListener(new BottomNavigationView.OnItemSelectedListener() {
             @SuppressLint("NonConstantResourceId")
             @Override
@@ -103,37 +107,27 @@ public class ProductActivity extends AppCompatActivity {
                 return false;
             }
         });
-
-
     }
 
     // Method to fetch all products from Firestore
     private void fetchProducts() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        // Fetch products from Firestore (assuming collection name is "products")
         db.collection("products")
                 .get()  // Get all products in the collection
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        // Clear the filteredList and productList to avoid duplicates
                         productList.clear();
                         filteredList.clear();
 
-                        // Iterate over the documents returned from Firestore
                         for (QueryDocumentSnapshot document : task.getResult()) {
-                            // Map Firestore document to Product object
                             Product product = document.toObject(Product.class);
-                            productList.add(product);  // Add product to the list
-
-                            // Add the product to the filtered list initially (before search filtering)
+                            productList.add(product);
                             filteredList.add(product);
                         }
 
-                        // Notify adapter that data has changed and needs to be displayed
                         productAdapter.notifyDataSetChanged();
                     } else {
-                        // Log the error in case of failure
                         Toast.makeText(ProductActivity.this, "Error getting products: " + task.getException(), Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -147,7 +141,7 @@ public class ProductActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                filterProducts(s.toString());  // Filter products as the user types
+                filterProducts(s.toString());
             }
 
             @Override
@@ -157,20 +151,55 @@ public class ProductActivity extends AppCompatActivity {
 
     // Filter products based on the search query
     private void filterProducts(String query) {
-        filteredList.clear();  // Clear the filtered list before adding new results
+        filteredList.clear();
 
         if (query.isEmpty()) {
-            filteredList.addAll(productList);  // If search is empty, show all products
+            filteredList.addAll(productList);
         } else {
             for (Product product : productList) {
-                // Check if the product name contains the query, case insensitive
                 if (product.getName().toLowerCase().contains(query.toLowerCase())) {
-                    filteredList.add(product);  // Add matching products to filtered list
+                    filteredList.add(product);
                 }
             }
         }
 
-        // Notify the adapter that the data has changed
         productAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Refresh the product list after adding or updating a product
+        fetchProducts();
+    }
+    private void deleteProduct(Product product) {
+        // Delete product from Firestore
+        db.collection("products").document(product.getId())  // Use the product's id to identify the document
+                .delete()
+                .addOnSuccessListener(aVoid -> {
+                    // Successfully deleted the product from Firestore
+                    Toast.makeText(ProductActivity.this, "Product deleted successfully!", Toast.LENGTH_SHORT).show();
+
+                    // Remove the product from the lists and update the adapter
+                    productList.remove(product);
+                    filteredList.remove(product);
+                    productAdapter.notifyDataSetChanged();
+                })
+                .addOnFailureListener(e -> {
+                    // Handle error
+                    Toast.makeText(ProductActivity.this, "Error deleting product: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                });
+    }
+
+    private void updateProduct(Product product) {
+        Intent intent = new Intent(ProductActivity.this, UpdateProductActivity.class);
+        intent.putExtra("product_id", product.getId());  // Pass product ID to the update activity
+        intent.putExtra("product_name", product.getName());  // Pass other details as needed
+        intent.putExtra("product_author", product.getAuthor());
+        intent.putExtra("product_category", product.getCategory());
+        intent.putExtra("product_imageUrl", product.getImageUrl());
+        intent.putExtra("product_price", product.getPrice());
+
+        startActivity(intent);
     }
 }

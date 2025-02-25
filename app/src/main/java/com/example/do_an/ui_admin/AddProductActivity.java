@@ -10,14 +10,11 @@ import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.do_an.R;
-import com.example.do_an.ui_admin.Product;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.SetOptions;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,97 +22,111 @@ import java.util.List;
 import java.util.Map;
 
 public class AddProductActivity extends AppCompatActivity {
-    private EditText etNameProduct, etPriceProduct, etImageUrl;
+
+    private EditText etNameProduct, etPriceProduct, etImageUrl, etDescription, etAuthor;
     private Spinner spinnerCategory;
-    private Button btnUpdate;
+    private Button btnAddProduct;
     private FirebaseFirestore db;
-    private List<String> categoryList;
     private ArrayAdapter<String> categoryAdapter;
+    private List<String> categoryList;  // List to store categories
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_add_product);
+
+        // Initialize Firestore
+        db = FirebaseFirestore.getInstance();
+        categoryList = new ArrayList<>();
 
         // Initialize UI components
         etNameProduct = findViewById(R.id.etNameProduct);
         etPriceProduct = findViewById(R.id.etPriceProduct);
         etImageUrl = findViewById(R.id.etImageUrl);
+        etDescription = findViewById(R.id.etSummaryContent);
+        etAuthor = findViewById(R.id.etNameAuthor);
         spinnerCategory = findViewById(R.id.spinnerCategory_Product);
-        btnUpdate = findViewById(R.id.btnUpdate);
-        ImageButton btnBack = findViewById(R.id.btnBack);
-
-        // Initialize Firestore
-        db = FirebaseFirestore.getInstance();
-        categoryList = new ArrayList<>();
+        btnAddProduct = findViewById(R.id.btnUpdate);
 
         // Set up category spinner
         categoryAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categoryList);
         categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerCategory.setAdapter(categoryAdapter);
 
-        // Load categories from Firestore
-        loadCategoriesFromFirestore();
-
         // Handle back button
+        ImageButton btnBack = findViewById(R.id.btnBack);
         btnBack.setOnClickListener(v -> finish());
 
-        // Handle adding product
-        btnUpdate.setOnClickListener(view -> addProductToFirestore());
+        // Handle add product button
+        btnAddProduct.setOnClickListener(view -> addProductToFirestore());
+
+        // Load categories from Firestore
+        loadCategoriesFromFirestore();
     }
 
+    // Method to load categories from Firestore
     private void loadCategoriesFromFirestore() {
-        db.collection("categories")
+        db.collection("categories")  // Assuming the categories are stored in the "categories" collection
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        categoryList.clear();
+                        categoryList.clear();  // Clear existing categories
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             String categoryName = document.getString("name");
                             if (categoryName != null) {
-                                categoryList.add(categoryName);
+                                categoryList.add(categoryName);  // Add category to the list
                             }
                         }
-                        categoryAdapter.notifyDataSetChanged();  // Refresh spinner with new data
+                        categoryAdapter.notifyDataSetChanged();  // Notify the adapter to update the spinner
                     } else {
                         Toast.makeText(AddProductActivity.this, "Error loading categories!", Toast.LENGTH_SHORT).show();
                     }
                 });
     }
 
+    // Method to add a new product to Firestore
     private void addProductToFirestore() {
+        // Get input values
         String name = etNameProduct.getText().toString().trim();
-        String category = spinnerCategory.getSelectedItem().toString();
         String priceStr = etPriceProduct.getText().toString().trim();
         String imageUrl = etImageUrl.getText().toString().trim();
+        String description = etDescription.getText().toString().trim();
+        String author = etAuthor.getText().toString().trim();
+        String category = spinnerCategory.getSelectedItem().toString();
 
-        if (TextUtils.isEmpty(name) || TextUtils.isEmpty(category) || TextUtils.isEmpty(priceStr) || TextUtils.isEmpty(imageUrl)) {
-            Toast.makeText(this, "Please enter all required information!", Toast.LENGTH_SHORT).show();
+        // Validate input fields
+        if (TextUtils.isEmpty(name) || TextUtils.isEmpty(priceStr) || TextUtils.isEmpty(imageUrl) || TextUtils.isEmpty(description) || TextUtils.isEmpty(author)) {
+            Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
             return;
         }
 
+        // Parse price as a double
         double price;
         try {
             price = Double.parseDouble(priceStr);
         } catch (NumberFormatException e) {
-            Toast.makeText(this, "Invalid price format!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Invalid price format", Toast.LENGTH_SHORT).show();
             return;
         }
 
+        // Create a map to hold the product data
         Map<String, Object> productData = new HashMap<>();
         productData.put("name", name);
-        productData.put("category", category);
+        productData.put("author", author);
         productData.put("price", price);
+        productData.put("category", category);
         productData.put("imageUrl", imageUrl);
-        productData.put("timestamp", System.currentTimeMillis());
+        productData.put("description", description);
 
+        // Add product data to Firestore
         db.collection("products")
-                .add(productData)
+                .add(productData)  // Add a new document with auto-generated ID
                 .addOnSuccessListener(documentReference -> {
                     Toast.makeText(AddProductActivity.this, "Product added successfully!", Toast.LENGTH_SHORT).show();
-                    finish();
+                    finish();  // Close the activity after adding
                 })
-                .addOnFailureListener(e -> Toast.makeText(AddProductActivity.this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+                .addOnFailureListener(e -> {
+                    Toast.makeText(AddProductActivity.this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                });
     }
 }

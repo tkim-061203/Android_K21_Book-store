@@ -2,48 +2,22 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui_admin.AddProductActivity">
-    <!-- Nút Back -->
+    tools:context=".ui_admin.UpdateProductActivity">
 
-    <!-- Tiêu đề -->
-
-    <!-- Nhãn Tên -->
-    <ImageButton
-        android:id="@+id/btnBack"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:src="@drawable/baseline_arrow_back_24"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/tvTitle_Product"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="24dp"
-        android:text="Add Product"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@id/btnBack"
-        app:layout_constraintTop_toTopOf="parent" />
-
+    <!-- Product Name -->
     <TextView
         android:id="@+id/tvNameProductLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="12dp"
-        android:text="Name"
+        android:layout_marginTop="24dp"
+        android:text="Product Name"
         android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvTitle_Product" />
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <EditText
         android:id="@+id/etNameProduct"
@@ -55,7 +29,7 @@
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvNameProductLabel" />
+        app:layout_constraintTop_toBottomOf="@id/tvNameProductLabel"/>
 
     <TextView
         android:id="@+id/tvNameAuthorLabel"
@@ -81,39 +55,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvNameAuthorLabel" />
 
-    <TextView
-        android:id="@+id/tvCategoryLabel_Product"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="12dp"
-        android:text="Category"
-        android:textSize="14sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/etNameAuthor" />
 
-    <Spinner
-        android:id="@+id/spinnerCategory_Product"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvCategoryLabel_Product" />
-
-
+    <!-- Price -->
     <TextView
         android:id="@+id/tvPriceProductLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:text="Price"
         android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/spinnerCategory_Product" />
+        app:layout_constraintTop_toBottomOf="@id/etNameAuthor"/>
 
     <EditText
         android:id="@+id/etPriceProduct"
@@ -126,19 +80,20 @@
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvPriceProductLabel" />
+        app:layout_constraintTop_toBottomOf="@id/tvPriceProductLabel"/>
 
+    <!-- Image URL -->
     <TextView
         android:id="@+id/tvImageLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="12dp"
-        android:text="Image"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Image URL"
         android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/etPriceProduct" />
+        app:layout_constraintTop_toBottomOf="@id/etPriceProduct"/>
 
     <EditText
         android:id="@+id/etImageUrl"
@@ -150,22 +105,44 @@
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvImageLabel" />
+        app:layout_constraintTop_toBottomOf="@id/tvImageLabel"/>
 
+    <!-- Category Spinner -->
     <TextView
-        android:id="@+id/tvddescriptionLabel"
+        android:id="@+id/tvCategoryLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="16dp"
+        android:text="Category"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/etImageUrl"/>
+
+    <Spinner
+        android:id="@+id/spinnerCategory_Product"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvCategoryLabel"/>
+
+    <!-- Description -->
+    <TextView
+        android:id="@+id/tvDescriptionLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
         android:text="Description"
         android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/etImageUrl" />
+        app:layout_constraintTop_toBottomOf="@id/spinnerCategory_Product"/>
 
     <EditText
-        android:id="@+id/etSummaryContent"
+        android:id="@+id/etDescription"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -174,14 +151,17 @@
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvddescriptionLabel" />
+        app:layout_constraintTop_toBottomOf="@id/tvDescriptionLabel"
+        android:lines="4"
+        android:inputType="textMultiLine"/>
 
+    <!-- Update Button -->
     <Button
         android:id="@+id/btnUpdate"
         android:layout_width="411dp"
         android:layout_height="50dp"
         android:backgroundTint="#344CB7"
-        android:text="Add"
+        android:text="UPDATE"
         android:textAllCaps="true"
         android:textColor="@android:color/white"
         android:textSize="16sp"
@@ -190,5 +170,4 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginBottom="20dp"/>
-
 </androidx.constraintlayout.widget.ConstraintLayout>
