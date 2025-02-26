@@ -20,57 +20,57 @@
             android:orientation="vertical"
             android:padding="8dp">
 
-        <!-- Search Box -->
-        <EditText
-            android:id="@+id/searchBox"
-            android:elevation="3dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:padding="13dp"
-            android:hint="Search Your Item Here..."
-            android:background="@drawable/rounded_search_box"
-            android:drawablePadding="5dp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            <!-- Search Box -->
+            <EditText
+                android:id="@+id/searchBox"
+                android:elevation="3dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:padding="13dp"
+                android:hint="Search Your Item Here..."
+                android:background="@drawable/rounded_search_box"
+                android:drawablePadding="5dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
-        <!-- Image Carousel (RecyclerView) -->
-        <androidx.recyclerview.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_marginTop="10dp"
-            android:id="@+id/recycler"
-            app:layout_constraintTop_toBottomOf="@id/searchBox"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layoutManager="com.google.android.material.carousel.CarouselLayoutManager"/>
+            <!-- Image Carousel (RecyclerView) -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginTop="10dp"
+                android:id="@+id/recycler"
+                app:layout_constraintTop_toBottomOf="@id/searchBox"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layoutManager="com.google.android.material.carousel.CarouselLayoutManager"/>
 
-        <!-- Suggested Text -->
-        <TextView
-            android:id="@+id/suggestedText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:text="Có thể bạn sẽ thích"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:textColor="@android:color/black"/>
+            <!-- Suggested Text -->
+            <TextView
+                android:id="@+id/suggestedText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="Có thể bạn sẽ thích"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:textColor="@android:color/black"/>
 
-        <!-- Bookstore Section -->
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerBooks"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="80dp"
-            android:padding="8dp"
-            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-            app:spanCount="3"
-            app:layout_constraintTop_toBottomOf="@id/recycler"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            <!-- Bookstore Section -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerBooks"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="80dp"
+                android:padding="8dp"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                app:spanCount="3"
+                app:layout_constraintTop_toBottomOf="@id/recycler"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

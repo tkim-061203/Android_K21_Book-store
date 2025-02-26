@@ -5,42 +5,49 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RatingBar;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
 import com.example.do_an.R;
 
-import java.util.ArrayList;
+import java.text.DecimalFormat;
+import java.util.List;
 
-public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
+public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder> {
+
     private Context context;
-    private ArrayList<Book> bookList;
+    private List<Book> bookList;
 
-    public BookAdapter(Context context, ArrayList<Book> bookList) {
+    public BookAdapter(Context context, List<Book> bookList) {
         this.context = context;
         this.bookList = bookList;
     }
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public BookViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_book, parent, false);
-        return new ViewHolder(view);
+        return new BookViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull BookViewHolder holder, int position) {
         Book book = bookList.get(position);
 
+        // Set book details in the views
         holder.bookName.setText(book.getName());
-        holder.bookWriter.setText(book.getWriter());
-        holder.bookRating.setRating(book.getRating());
+        holder.bookAuthor.setText(book.getAuthor());
+        DecimalFormat decimalFormat = new DecimalFormat("#,###");
+        String formattedPrice = decimalFormat.format(book.getPrice()) + " VND";
+        holder.bookPrice.setText(formattedPrice);
 
-        Glide.with(context).load(book.getImageUrl()).into(holder.bookCover);
+        // Load the image using Glide
+        Glide.with(context)
+                .load(book.getImageUrl())  // Use the image URL from the Book object
+                .placeholder(R.drawable.baseline_image_24)  // Optional placeholder while image is loading
+                .error(R.drawable.baseline_image_24)  // Optional error image if Glide fails to load
+                .into(holder.bookImage);  // Load into the ImageView
     }
 
     @Override
@@ -48,17 +55,16 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
         return bookList.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView bookCover;
-        TextView bookName, bookWriter;
-        RatingBar bookRating;
+    public static class BookViewHolder extends RecyclerView.ViewHolder {
+        TextView bookName, bookAuthor, bookPrice;
+        ImageView bookImage;  // ImageView for the book cover image
 
-        public ViewHolder(@NonNull View itemView) {
+        public BookViewHolder(@NonNull View itemView) {
             super(itemView);
-            bookCover = itemView.findViewById(R.id.bookCover);
             bookName = itemView.findViewById(R.id.bookName);
-            bookWriter = itemView.findViewById(R.id.bookWriter);
-            bookRating = itemView.findViewById(R.id.bookRating);
+            bookAuthor = itemView.findViewById(R.id.bookAuthor);
+            bookPrice = itemView.findViewById(R.id.bookPrice);
+            bookImage = itemView.findViewById(R.id.bookImage);  // Initialize the ImageView
         }
     }
 }

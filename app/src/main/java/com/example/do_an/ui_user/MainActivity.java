@@ -9,25 +9,40 @@ import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.recyclerview.widget.GridLayoutManager;
+
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.MenuItem;
 import java.util.ArrayList;
+
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.do_an.R;
+import com.example.do_an.ui_admin.Product;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 public class MainActivity extends AppCompatActivity {
 
     RecyclerView recyclerBooks;
+    private EditText searchBox;
     BookAdapter bookAdapter;
-    ArrayList<Book> bookList;
+    ArrayList<Book> bookList = new ArrayList<>();
+    ArrayList<Book> filteredList = new ArrayList<>();
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
+        setContentView(R.layout.activity_main);
+        searchBox = findViewById(R.id.searchBox);
         RecyclerView recyclerView = findViewById(R.id.recycler);
+
         ArrayList<String> arrayList = new ArrayList<>();
 
         arrayList.add("https://cogaihu.com/wp-content/uploads/2024/09/458789789_478113745044766_3570699670058121927_n.jpg?w=816");
@@ -56,17 +71,13 @@ public class MainActivity extends AppCompatActivity {
         recyclerBooks.setLayoutManager(layoutManager);
         //recyclerBooks.setLayoutManager(new GridLayoutManager(this, 3));
 
-        bookList = new ArrayList<>();
-        bookList.add(new Book("Book 1", "Author 1", "https://d3525k1ryd2155.cloudfront.net/f/176/070/9798217070176.IN.0.m.jpg", 4.5f));
-        bookList.add(new Book("Book 2", "Author 2", "https://d3525k1ryd2155.cloudfront.net/h/344/237/1570237344.0.l.jpg", 4.0f));
-        bookList.add(new Book("Book 3", "Author 3", "https://m.media-amazon.com/images/I/815rJRMLqqL.jpg", 4.8f));
-        bookList.add(new Book("Book 4", "Author 4", "https://m.media-amazon.com/images/I/71jWyah3siL._AC_UF1000,1000_QL80_.jpg", 3.9f));
-        bookList.add(new Book("Book 5", "Author 5", "https://sachngoaingugiare.com/wp-content/uploads/2024/07/let-1-786x1024.png", 5.0f));
-        bookList.add(new Book("Book 6", "Author 6", "https://chantroisangtao.vn/wp-content/uploads/2022/02/Screenshot-2022-02-17-095129-70.png", 4.2f));
 
-        bookAdapter = new BookAdapter(this, bookList);
+        bookAdapter = new BookAdapter(this, filteredList);
         recyclerBooks.setAdapter(bookAdapter);
 
+        fetchBooksFromFirestore();
+
+        setupSearch();
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
         bottomNavigationView.setSelectedItemId(R.id.bottom_home);
@@ -94,4 +105,74 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void fetchBooksFromFirestore() {
+        // Ensure Firestore is properly initialized
+        if (db == null) {
+            Toast.makeText(MainActivity.this, "Firestore not initialized!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Fetch books from Firestore
+        db.collection("products")
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        // Clear the lists before adding new data
+                        bookList.clear();
+                        filteredList.clear();
+
+                        // Iterate through Firestore documents and convert to Book objects
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            Book book = document.toObject(Book.class);
+                            book.setId(document.getId()); // Set the document ID as the book's ID
+                            bookList.add(book);
+                            filteredList.add(book); // Add to filteredList initially
+                        }
+
+                        // Notify the adapter that the data has changed
+                        bookAdapter.notifyDataSetChanged();
+                    } else {
+                        // Show error if the fetch failed
+                        Toast.makeText(MainActivity.this, "Error getting books: " + task.getException(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void setupSearch() {
+        searchBox.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                filteredbookList(s.toString());  // Filter books based on search query
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+    }
+
+    private void filteredbookList(String query) {
+        filteredList.clear();  // Clear the current filtered list
+
+        // If the query is empty, show all books by adding all items from bookList
+        if (query.isEmpty()) {
+            filteredList.addAll(bookList);  // Add all books to the filtered list
+        } else {
+            // Loop through bookList and add books that match the query
+            for (Book book : bookList) {
+                if (book.getName().toLowerCase().contains(query.toLowerCase())) {
+                    filteredList.add(book);  // Add matching books to the filtered list
+                }
+            }
+        }
+
+        // Notify the adapter to refresh the RecyclerView with the filtered list
+        bookAdapter.notifyDataSetChanged();
+    }
+
+
+
 }

@@ -208,6 +208,7 @@ public class ProductActivity extends AppCompatActivity {
         intent.putExtra("product_category", product.getCategory());
         intent.putExtra("product_imageUrl", product.getImageUrl());
         intent.putExtra("product_price", product.getPrice());
+        intent.putExtra("product_description", product.getDescription());
 
         startActivity(intent);
     }

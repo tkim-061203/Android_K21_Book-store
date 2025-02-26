@@ -1,20 +1,60 @@
 package com.example.do_an.ui_user;
-
 public class Book {
+    private String id;
     private String name;
-    private String writer;
+    private String author;
     private String imageUrl;
-    private float rating;
+    private Double price;
 
-    public Book(String name, String writer, String imageUrl, float rating) {
+    // Constructor, getters, and setters
+    public Book() { }
+
+    public Book(String id, String name, String author, String imageUrl, Double  price) {
+        this.id = id;
         this.name = name;
-        this.writer = writer;
+        this.author = author;
         this.imageUrl = imageUrl;
-        this.rating = rating;
+        this.price = price;
     }
 
-    public String getName() { return name; }
-    public String getWriter() { return writer; }
-    public String getImageUrl() { return imageUrl; }
-    public float getRating() { return rating; }
+    // Getters and setters
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double  price) {
+        this.price = price;
+    }
 }

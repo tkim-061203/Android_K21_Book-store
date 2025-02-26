@@ -8,7 +8,7 @@
 
     <!-- Book Cover -->
     <ImageView
-        android:id="@+id/bookCover"
+        android:id="@+id/bookImage"
         android:layout_width="120dp"
         android:layout_height="180dp"
         android:scaleType="fitXY"
@@ -27,7 +27,7 @@
 
     <!-- Writer Name -->
     <TextView
-        android:id="@+id/bookWriter"
+        android:id="@+id/bookAuthor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Author Name"
@@ -35,16 +35,16 @@
         android:gravity="center"
         android:textColor="@android:color/darker_gray"
         android:paddingTop="2dp"/>
-
-    <!-- Star Rating -->
-    <RatingBar
-        android:id="@+id/bookRating"
-        style="@style/Widget.AppCompat.RatingBar.Small"
+    <TextView
+        android:id="@+id/bookPrice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:numStars="5"
-        android:stepSize="0.5"
-        android:rating="4.5"
-        android:layout_marginTop="2dp"/>
+        android:text="500.000 VND"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/holo_red_dark"
+        android:layout_toEndOf="@id/productImage"
+        android:layout_below="@id/productAuthor"
+        android:layout_marginTop="8dp"/>
 
 </LinearLayout>
