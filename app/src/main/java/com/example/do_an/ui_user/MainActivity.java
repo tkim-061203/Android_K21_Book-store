@@ -69,7 +69,6 @@ public class MainActivity extends AppCompatActivity {
 
         GridLayoutManager layoutManager = new GridLayoutManager(this, spanCount);
         recyclerBooks.setLayoutManager(layoutManager);
-        //recyclerBooks.setLayoutManager(new GridLayoutManager(this, 3));
 
 
         bookAdapter = new BookAdapter(this, filteredList);
@@ -97,6 +96,11 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                 } else if (itemId == R.id.bottom_profile) {
                     startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                    finish();
+                    return true;
+                } else if (itemId == R.id.bottom_Cate) {
+                    startActivity(new Intent(getApplicationContext(), User_CategoryActivity.class));
                     overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                     finish();
                     return true;

@@ -1,6 +1,7 @@
 package com.example.do_an.ui_user;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,6 +49,16 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
                 .placeholder(R.drawable.baseline_image_24)  // Optional placeholder while image is loading
                 .error(R.drawable.baseline_image_24)  // Optional error image if Glide fails to load
                 .into(holder.bookImage);  // Load into the ImageView
+
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(context, BookDetailActivity.class);
+            intent.putExtra("bookId", book.getId());  // Pass book id (or any other identifier)
+            intent.putExtra("bookName", book.getName());
+            intent.putExtra("bookAuthor", book.getAuthor());
+            intent.putExtra("bookPrice", formattedPrice); // Pass the formatted price
+            intent.putExtra("bookImageUrl", book.getImageUrl());
+            context.startActivity(intent);  // Start BookDetailActivity
+        });
     }
 
     @Override

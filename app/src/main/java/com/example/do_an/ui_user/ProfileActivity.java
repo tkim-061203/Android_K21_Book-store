@@ -131,6 +131,11 @@ public class ProfileActivity extends AppCompatActivity {
                     return true;
                 } else if (itemId == R.id.bottom_profile) {
                     return true;
+                } else if (itemId == R.id.bottom_Cate) {
+                    startActivity(new Intent(getApplicationContext(), User_CategoryActivity.class));
+                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                    finish();
+                    return true;
                 }
                 return false;
             }

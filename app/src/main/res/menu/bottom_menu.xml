@@ -8,9 +8,14 @@
         android:title="Home" />
 
     <item
+        android:id="@+id/bottom_Cate"
+        android:icon="@drawable/baseline_category_24"
+        android:title="Home" />
+
+    <item
         android:id="@+id/bottom_cart"
         android:icon="@drawable/baseline_shopping_cart_24"
-        android:title="Library" />
+        android:title="Cart" />
 
 
     <item
