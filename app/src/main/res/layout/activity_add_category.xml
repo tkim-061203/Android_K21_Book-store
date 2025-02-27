@@ -17,7 +17,9 @@
         android:src="@drawable/baseline_arrow_back_24"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="@id/tvTitle" />
+        app:layout_constraintBottom_toBottomOf="@id/tvTitle"
+        android:layout_marginLeft="10dp"
+        />
 
     <!-- Title -->
     <TextView
