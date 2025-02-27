@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,9 +26,12 @@ public class CartActivity extends AppCompatActivity {
         setContentView(R.layout.activity_cart);
 
 
-
         RecyclerView recyclerView = findViewById(R.id.recyclerCart);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        TextView tvTotalPrice = findViewById(R.id.tvTotalPrice);
+
+        CartAdapter.fetchCartItems(this, tvTotalPrice);
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
         bottomNavigationView.setSelectedItemId(R.id.bottom_cart);
