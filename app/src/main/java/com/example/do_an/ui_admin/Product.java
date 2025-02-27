@@ -25,7 +25,7 @@ public class Product {
         this.imageUrl = imageUrl;
         this.description = description;
         this.category = category;
-        this.author = author;  // Initialize author
+        this.author = author;
     }
 
     // Getters and Setters
