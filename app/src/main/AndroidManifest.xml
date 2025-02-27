@@ -83,6 +83,10 @@
         <activity
             android:name=".ui_user.CartActivity"
             android:exported="false" />
+        <activity
+            android:name=".ui_user.CategoryActivity"
+            android:exported="false" />
+
     </application>
 
 </manifest>

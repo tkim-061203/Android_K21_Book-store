@@ -176,7 +176,4 @@ public class MainActivity extends AppCompatActivity {
         // Notify the adapter to refresh the RecyclerView with the filtered list
         bookAdapter.notifyDataSetChanged();
     }
-
-
-
 }
