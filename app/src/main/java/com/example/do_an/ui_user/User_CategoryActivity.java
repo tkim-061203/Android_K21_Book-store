@@ -22,6 +22,8 @@ public class User_CategoryActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_user_category);
 
+
+
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_Navigation);
         bottomNavigationView.setSelectedItemId(R.id.bottom_Cate);
 
