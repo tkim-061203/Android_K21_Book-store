@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.do_an.R;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.DecimalFormat;
 import java.util.List;
@@ -50,14 +51,24 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
                 .error(R.drawable.baseline_image_24)  // Optional error image if Glide fails to load
                 .into(holder.bookImage);  // Load into the ImageView
 
-        holder.itemView.setOnClickListener(v -> {
-            Intent intent = new Intent(context, BookDetailActivity.class);
-            intent.putExtra("bookId", book.getId());  // Pass book id (or any other identifier)
-            intent.putExtra("bookName", book.getName());
-            intent.putExtra("bookAuthor", book.getAuthor());
-            intent.putExtra("bookPrice", formattedPrice); // Pass the formatted price
-            intent.putExtra("bookImageUrl", book.getImageUrl());
-            context.startActivity(intent);  // Start BookDetailActivity
+        // Lấy category và description từ Firebase Firestore
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("books").document(book.getId()).get().addOnSuccessListener(documentSnapshot -> {
+            String category = documentSnapshot.getString("category");
+            String description = documentSnapshot.getString("description");
+
+
+                holder.itemView.setOnClickListener(v -> {
+                    Intent intent = new Intent(context, BookDetailActivity.class);
+                    intent.putExtra("bookId", book.getId());  // Pass book id (or any other identifier)
+                    intent.putExtra("bookName", book.getName());
+                    intent.putExtra("bookAuthor", book.getAuthor());
+                    intent.putExtra("bookPrice", formattedPrice); // Pass the formatted price
+                    intent.putExtra("bookImageUrl", book.getImageUrl());
+                    intent.putExtra("bookCategory", category != null ? category : "Unknown");
+                    intent.putExtra("bookDescription", description != null ? description : "No description available");
+                    context.startActivity(intent);  // Start BookDetailActivity
+                });
         });
     }
 
