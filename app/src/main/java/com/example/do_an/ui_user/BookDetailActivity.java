@@ -13,6 +13,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.example.do_an.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class BookDetailActivity extends AppCompatActivity {
 
@@ -67,8 +70,24 @@ public class BookDetailActivity extends AppCompatActivity {
 
         // Xử lý nút "Thêm vào giỏ hàng"
         btnBuy.setOnClickListener(v -> {
-            Toast.makeText(BookDetailActivity.this, "Đã thêm vào giỏ hàng!", Toast.LENGTH_SHORT).show();
-            // Thêm logic thêm vào giỏ hàng ở đây (hiện tại chỉ hiển thị Toast)
+            String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            DatabaseReference cartRef = FirebaseDatabase.getInstance().getReference("carts").child(userID);
+
+            String bookId = intent.getStringExtra("bookId");
+            String name = intent.getStringExtra("bookName");
+            String price = intent.getStringExtra("bookPrice");
+            String imageUrl = intent.getStringExtra("bookImageUrl");
+
+            CartItem cartItem = new CartItem(bookId, name, imageUrl, Double.parseDouble(price.replace(" VND", "").replace(",", "")), 1);
+
+            cartRef.child(bookId).setValue(cartItem)
+                    .addOnSuccessListener(aVoid -> {
+                        Toast.makeText(BookDetailActivity.this, "Đã thêm vào giỏ hàng!", Toast.LENGTH_SHORT).show();
+                    })
+                    .addOnFailureListener(e -> {
+                        Toast.makeText(BookDetailActivity.this, "Lỗi: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    });
         });
+
+        }
     }
-}
