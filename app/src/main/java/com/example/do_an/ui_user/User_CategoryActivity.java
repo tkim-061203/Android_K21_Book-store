@@ -13,8 +13,6 @@ import com.example.do_an.R;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.example.do_an.ui_admin.Category;
-import com.example.do_an.ui_admin.UpdateCategoryActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -96,7 +94,7 @@ public class User_CategoryActivity extends AppCompatActivity {
 
                         categoryList.clear();
                         for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                            com.example.do_an.ui_admin.Category category = doc.toObject(Category.class);
+                            com.example.do_an.ui_user.Category category = doc.toObject(Category.class);
                             category.setId(doc.getId());  // Ensure you are adding the document ID
                             categoryList.add(category);
                         }
@@ -106,5 +104,4 @@ public class User_CategoryActivity extends AppCompatActivity {
                     }
                 });
     }
-
 }
