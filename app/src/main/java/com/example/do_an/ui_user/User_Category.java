@@ -1,14 +1,14 @@
 package com.example.do_an.ui_user;
 
-public class Category {
+public class User_Category {
     private String id;
     private String name;
 
-    public Category() {
+    public User_Category() {
         // Firebase cần constructor rỗng
     }
 
-    public Category(String id, String name) {
+    public User_Category(String id, String name) {
         this.id = id;
         this.name = name;
     }

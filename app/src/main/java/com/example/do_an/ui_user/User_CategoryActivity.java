@@ -6,7 +6,6 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.do_an.R;
 
@@ -16,40 +15,38 @@ import java.util.List;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import android.util.Log;
-import com.bumptech.glide.Glide;
 
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.Toast;
-import androidx.annotation.NonNull;
+
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 public class User_CategoryActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
-    private CategoryAdapter categoryAdapter;
-    private List<com.example.do_an.ui_admin.Category> categoryList = new ArrayList<>();
-    private List<com.example.do_an.ui_admin.Category> filteredList = new ArrayList<>();
+    private User_CategoryAdapter userCategoryAdapter;
+    private List<User_Category> categoryList = new ArrayList<>();
+    private List<User_Category> filteredList = new ArrayList<>();
     private FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_category);
+        setContentView(R.layout.activity_user_category);
 
         recyclerView = findViewById(R.id.recyclerViewCategories);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         db = FirebaseFirestore.getInstance();
-        recyclerView.setAdapter(categoryAdapter);
-        loadCategoriesFromFirebase();
 
+        // Initialize the adapter before setting it to RecyclerView
+        userCategoryAdapter = new User_CategoryAdapter(this, categoryList);
+        recyclerView.setAdapter(userCategoryAdapter);  // Set adapter after initializing
+
+        loadCategoriesFromFirebase();  // Now it should work after the adapter is set
         // Bottom Navigation
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
         bottomNavigationView.setSelectedItemId(R.id.bottom_Cate);
@@ -94,13 +91,13 @@ public class User_CategoryActivity extends AppCompatActivity {
 
                         categoryList.clear();
                         for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                            com.example.do_an.ui_user.Category category = doc.toObject(Category.class);
+                            User_Category category = doc.toObject(User_Category.class);
                             category.setId(doc.getId());  // Ensure you are adding the document ID
                             categoryList.add(category);
                         }
                         filteredList.clear();
                         filteredList.addAll(categoryList);
-                        categoryAdapter.notifyDataSetChanged();
+                        userCategoryAdapter.notifyDataSetChanged();
                     }
                 });
     }

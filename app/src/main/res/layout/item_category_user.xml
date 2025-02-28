@@ -16,18 +16,13 @@
         android:layout_gravity="center"
         android:background="@android:color/white">
 
-        <ImageView
-            android:id="@+id/imgCategory"
-            android:layout_width="80dp"
-            android:layout_height="100dp"
-            android:scaleType="centerCrop" />
-
         <TextView
             android:id="@+id/tvCategoryName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="14sp"
+            android:textSize="30sp"
             android:textStyle="bold"
+            android:text="Fiction"
             android:gravity="center"
             android:layout_marginTop="4dp" />
 

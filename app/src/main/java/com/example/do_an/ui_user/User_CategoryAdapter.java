@@ -1,6 +1,7 @@
 package com.example.do_an.ui_user;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,15 +9,15 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.do_an.R;
-import com.example.do_an.ui_user.Category;
+
 import java.util.List;
 
 
-public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHolder> {
+public class User_CategoryAdapter extends RecyclerView.Adapter<User_CategoryAdapter.ViewHolder> {
     private Context context;
-    private List<Category> categoryList;
+    private List<User_Category> categoryList;
 
-    public CategoryAdapter(Context context, List<Category> categoryList) {
+    public User_CategoryAdapter(Context context, List<User_Category> categoryList) {
         this.context = context;
         this.categoryList = categoryList;
     }
@@ -24,13 +25,13 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_category, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_category_user, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Category category = categoryList.get(position);
+        User_Category category = categoryList.get(position);
         holder.textViewCategory.setText(category.getName());
     }
 
@@ -45,6 +46,9 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             textViewCategory = itemView.findViewById(R.id.tvCategoryName);
+            if (textViewCategory == null) {
+                Log.e("User_CategoryAdapter", "TextView with ID tvCategoryName is null");
+            }
         }
     }
 }
