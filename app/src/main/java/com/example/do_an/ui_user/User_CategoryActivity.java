@@ -3,19 +3,24 @@ package com.example.do_an.ui_user;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.do_an.R;
-import com.example.do_an.adapters.CategoryAdapter;
-import com.example.do_an.models.Category;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.do_an.ui_admin.Category;
 import com.example.do_an.ui_admin.UpdateCategoryActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import android.util.Log;
 import com.bumptech.glide.Glide;
@@ -31,7 +36,8 @@ public class User_CategoryActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private CategoryAdapter categoryAdapter;
-    private List<Category> categoryList;
+    private List<com.example.do_an.ui_admin.Category> categoryList = new ArrayList<>();
+    private List<com.example.do_an.ui_admin.Category> filteredList = new ArrayList<>();
     private FirebaseFirestore db;
 
     @Override
@@ -42,16 +48,14 @@ public class User_CategoryActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerViewCategories);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        categoryList = new ArrayList<>();
-        categoryAdapter = new CategoryAdapter(this, categoryList);
-        recyclerView.setAdapter(categoryAdapter);
-
         db = FirebaseFirestore.getInstance();
+        recyclerView.setAdapter(categoryAdapter);
         loadCategoriesFromFirebase();
+
+        // Bottom Navigation
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
         bottomNavigationView.setSelectedItemId(R.id.bottom_Cate);
 
-        // Using the OnItemSelectedListener correctly
         bottomNavigationView.setOnItemSelectedListener(new BottomNavigationView.OnItemSelectedListener() {
             @SuppressLint("NonConstantResourceId")
             @Override
@@ -81,23 +85,24 @@ public class User_CategoryActivity extends AppCompatActivity {
     }
 
     private void loadCategoriesFromFirebase() {
-
         db.collection("categories")
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        QuerySnapshot documents = task.getResult();
-                        if (documents != null) {
-                            for (DocumentSnapshot document : documents) {
-                                String name = document.getString("name");
-                                String imageUrl = document.getString("imageUrl"); // Lấy ảnh từ Firestore
-                                categoryList.add(new Category(name, imageUrl));
-                            }
-                            categoryAdapter.notifyDataSetChanged();
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                        if (e != null) {
+                            Log.e("Firestore", "Error fetching categories", e);
+                            return;
                         }
-                    } else {
-                        Toast.makeText(User_CategoryActivity.this, "Lỗi tải dữ liệu!", Toast.LENGTH_SHORT).show();
-                        Log.e("CategoryActivity", "Firestore Error: ", task.getException());
+
+                        categoryList.clear();
+                        for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                            com.example.do_an.ui_admin.Category category = doc.toObject(Category.class);
+                            category.setId(doc.getId());  // Ensure you are adding the document ID
+                            categoryList.add(category);
+                        }
+                        filteredList.clear();
+                        filteredList.addAll(categoryList);
+                        categoryAdapter.notifyDataSetChanged();
                     }
                 });
     }

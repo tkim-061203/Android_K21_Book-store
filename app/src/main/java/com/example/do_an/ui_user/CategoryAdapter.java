@@ -1,21 +1,18 @@
-package com.example.do_an.adapters;
+package com.example.do_an.ui_user;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.do_an.R;
-import com.example.do_an.models.Category;
+import com.example.do_an.ui_user.Category;
 import java.util.List;
-import com.bumptech.glide.Glide;
 
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHolder> {
-
     private Context context;
     private List<Category> categoryList;
 
@@ -35,11 +32,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Category category = categoryList.get(position);
         holder.textViewCategory.setText(category.getName());
-
-        // Load ảnh từ URL Firestore bằng Glide
-        Glide.with(context).load(category.getImageUrl()).into(holder.imageViewCategory);
     }
-
 
     @Override
     public int getItemCount() {
@@ -48,12 +41,10 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView textViewCategory;
-        ImageView imageViewCategory;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             textViewCategory = itemView.findViewById(R.id.tvCategoryName);
-            imageViewCategory = itemView.findViewById(R.id.imgCategory);
         }
     }
 }
