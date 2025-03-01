@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -44,7 +45,10 @@ public class User_BookListActivity extends AppCompatActivity {
         txtCategoryTitle.setText("Category: " + categoriesName);
 
         recyclerView = findViewById(R.id.recyclerViewBooks);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        int spanCount = getResources().getConfiguration().screenWidthDp > 600 ? 4 : 3; // 4 for tablets
+
+        GridLayoutManager layoutManager = new GridLayoutManager(this, spanCount);
+        recyclerView.setLayoutManager(layoutManager);
 
 
         filteredList = new ArrayList<>();
