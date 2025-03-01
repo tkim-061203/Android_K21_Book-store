@@ -46,7 +46,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         CartItem item = cartItems.get(position);
 
         holder.tvBookTitle.setText(item.getName());
-        holder.tvBookPrice.setText(String.format("%,.0f VND", item.getPrice()));
+        holder.tvBookPrice.setText(String.format("%,.2f VND", item.getPrice()));
         holder.tvQuantity.setText(String.valueOf(item.getQuantity()));
         Glide.with(context).load(item.getImageUrl()).into(holder.ivBookImage);
 
@@ -106,7 +106,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
                 recyclerView.setAdapter(new CartAdapter(context, cartList, tvTotalPrice));
 
                 // Cập nhật tổng giá tiền trong CartActivity
-                tvTotalPrice.setText(String.format("Total: %,.0f VND", totalPrice));
+                tvTotalPrice.setText(String.format("Total: %,.2f VND", totalPrice));
             }
 
             @Override

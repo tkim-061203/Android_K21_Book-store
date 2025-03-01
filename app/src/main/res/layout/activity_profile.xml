@@ -47,28 +47,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="8dp"/>
 
-    <!-- Danh sách sách đã mua -->
-    <TextView
-        android:id="@+id/tv_books_purchased"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Sách đã mua:"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:textColor="#000000"
-        app:layout_constraintTop_toBottomOf="@id/profile_name"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="24dp"
-        android:layout_marginStart="16dp"/>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_books_purchased"
-        android:layout_width="match_parent"
-        android:layout_height="120dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@id/tv_books_purchased"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
 
 
     <!-- Nút Chỉnh sửa hồ sơ -->
@@ -81,7 +60,7 @@
         android:textColor="#FFFFFF"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@id/tv_books_purchased"
+        app:layout_constraintTop_toBottomOf="@id/profile_email"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="24dp"/>
