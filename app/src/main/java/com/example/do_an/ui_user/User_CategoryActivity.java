@@ -18,10 +18,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import android.util.DisplayMetrics;
 import android.util.Log;
-
 import android.view.MenuItem;
-
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 public class User_CategoryActivity extends AppCompatActivity {
@@ -38,7 +38,10 @@ public class User_CategoryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_user_category);
 
         recyclerView = findViewById(R.id.recyclerViewCategories);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        // Tự động tính số cột theo kích thước màn hình
+        int numberOfColumns = calculateNoOfColumns(150); // 150dp là kích thước tối thiểu của 1 ô danh mục
+        recyclerView.setLayoutManager(new GridLayoutManager(this, numberOfColumns));
 
         db = FirebaseFirestore.getInstance();
 
@@ -100,5 +103,11 @@ public class User_CategoryActivity extends AppCompatActivity {
                         userCategoryAdapter.notifyDataSetChanged();
                     }
                 });
+    }
+    // Hàm tính số cột dựa trên kích thước màn hình
+    private int calculateNoOfColumns(float columnWidthDp) {
+        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+        float screenWidthDp = displayMetrics.widthPixels / displayMetrics.density;
+        return Math.max(2, (int) (screenWidthDp / columnWidthDp)); // Ít nhất 2 cột
     }
 }

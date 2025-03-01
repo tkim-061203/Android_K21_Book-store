@@ -9,6 +9,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.do_an.R;
+import android.content.Intent;
+
 
 import java.util.List;
 
@@ -33,6 +35,13 @@ public class User_CategoryAdapter extends RecyclerView.Adapter<User_CategoryAdap
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         User_Category category = categoryList.get(position);
         holder.textViewCategory.setText(category.getName());
+
+        // Bắt sự kiện khi nhấn vào category
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(context, User_BookListActivity.class);
+            intent.putExtra("category", category.getName()); // Truyền tên category
+            context.startActivity(intent);
+        });
     }
 
     @Override

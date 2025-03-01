@@ -14,6 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.do_an.R;
+import com.example.do_an.ui_user.Book;
+import com.example.do_an.ui_user.User_BookListActivity;
 
 import java.text.DecimalFormat;
 import java.util.List;
@@ -26,6 +28,9 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         this.context = context;
         this.productList = productList;
         this.listener = listener;
+    }
+
+    public ProductAdapter(User_BookListActivity context, List<Book> filteredList) {
     }
 
     @NonNull

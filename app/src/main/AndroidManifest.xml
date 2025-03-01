@@ -90,7 +90,7 @@
             android:name=".ui_user.CartActivity"
             android:exported="false" />
         <activity
-            android:name=".ui_user.CategoryActivity"
+            android:name=".ui_user.User_Book"
             android:exported="false" />
     </application>
 
