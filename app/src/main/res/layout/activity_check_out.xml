@@ -4,65 +4,96 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui_user.CartActivity">
+    tools:context=".ui_user.CheckOutActivity">
+
+
+    <!-- Back Button -->
+    <ImageButton
+        android:id="@+id/btnBack"
+        android:layout_marginTop="24dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/baseline_arrow_back_24"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/tvTitle"
+        android:layout_marginLeft="10dp"
+        />
+
+    <!-- Title -->
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cart"
+        android:textSize="18sp"
+        android:layout_marginTop="24dp"
+        android:textStyle="bold"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toBottomOf="@id/btnBack"
+        app:layout_constraintStart_toEndOf="@id/btnBack"
+        app:layout_constraintTop_toTopOf="parent"/>
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:layout_marginTop="20dp"
-        tools:ignore="MissingConstraints" />
+        app:layout_constraintBaseline_toBottomOf="@id/tvTitle"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="70dp" />
 
-
-    <!-- Payment Method -->
     <TextView
         android:id="@+id/payment_method_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Phương thức thanh toán"
+        android:paddingStart="16dp"
+        android:text="Payment method"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@id/recyclerView"
-        android:layout_marginTop="16dp"
-        android:paddingStart="16dp"
-        tools:ignore="MissingConstraints" />
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="296dp" />
 
     <Spinner
         android:id="@+id/payment_method_spinner"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="16dp"
+        android:padding="8dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/payment_method_label"
-        android:layout_marginTop="8dp"
-        android:padding="8dp" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/payment_method_label"
+        tools:ignore="MissingConstraints" />
 
-    <!-- Delivery Address -->
     <TextView
         android:id="@+id/delivery_address_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Địa chỉ giao hàng"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@id/payment_method_spinner"
         android:layout_marginTop="16dp"
         android:paddingStart="16dp"
-        tools:ignore="MissingConstraints" />
+        android:text="Address"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@+id/payment_method_spinner"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="0dp" />
 
     <TextView
         android:id="@+id/delivery_address"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Chuong Duong, Hoan Kiem, Ha Noi"
-        app:layout_constraintTop_toBottomOf="@id/delivery_address_label"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
+        android:background="?android:attr/selectableItemBackground"
         android:padding="8dp"
-        android:background="?android:attr/selectableItemBackground" />
+        android:text="Chuong Duong, Hoan Kiem, Ha Noi"
+        app:layout_constraintTop_toBottomOf="@+id/delivery_address_label"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="0dp" />
 
-
-
-    <!-- Total Section -->
     <LinearLayout
         android:id="@+id/total_section"
         android:layout_width="match_parent"
@@ -76,7 +107,7 @@
             android:id="@+id/total_price_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tổng tiền"
+            android:text="Total:"
             android:textSize="18sp"
             android:textStyle="bold" />
 
@@ -96,8 +127,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
-        android:backgroundTint="#FF0000"
-        android:text="Đặt đơn hàng"
+        android:backgroundTint="#344CB7"
+        android:text="Order"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
