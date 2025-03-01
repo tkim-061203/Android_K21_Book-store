@@ -27,9 +27,6 @@
             android:name=".ui_user.CheckOutActivity"
             android:exported="false" />
         <activity
-            android:name=".ui_user.CartItem"
-            android:exported="false" />
-        <activity
             android:name=".ui_user.User_CategoryActivity"
             android:exported="false" />
         <activity
@@ -93,7 +90,7 @@
             android:name=".ui_user.CartActivity"
             android:exported="false" />
         <activity
-            android:name=".ui_user.User_Book"
+            android:name=".ui_user.User_BookListActivity"
             android:exported="false" />
     </application>
 

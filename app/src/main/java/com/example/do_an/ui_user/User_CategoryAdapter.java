@@ -39,7 +39,8 @@ public class User_CategoryAdapter extends RecyclerView.Adapter<User_CategoryAdap
         // Bắt sự kiện khi nhấn vào category
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, User_BookListActivity.class);
-            intent.putExtra("category", category.getName()); // Truyền tên category
+            intent.putExtra("categoryID", category.getId()); // Truyền ID danh mục
+            intent.putExtra("categoryName", category.getName()); // Truyền tên danh mục
             context.startActivity(intent);
         });
     }

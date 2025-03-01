@@ -42,44 +42,48 @@ public class User_BookListActivity extends AppCompatActivity {
         categoriesID = getIntent().getStringExtra("categoryID");
         categoriesName = getIntent().getStringExtra("categoryName");
 
-        // Hiển thị tên danh mục
         TextView txtCategoryTitle = findViewById(R.id.txtCategoryTitle);
         txtCategoryTitle.setText("Danh mục: " + categoriesName);
 
-        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView = findViewById(R.id.recyclerViewBooks);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        db = FirebaseFirestore.getInstance();
-
-        // Initialize the product lists
+        // Khởi tạo danh sách trước khi dùng Adapter
         productList = new ArrayList<>();
         filteredList = new ArrayList<>();
 
-        // Khởi tạo adapter và set vào RecyclerView
+        // Khởi tạo adapter với danh sách rỗng trước
         bookAdapter = new ProductAdapter(this, filteredList);
         recyclerView.setAdapter(bookAdapter);
 
-        loadBooksFromFirebase();
+        loadBooksFromFirebase(); // Tải sách từ Firebase
     }
 
     private void loadBooksFromFirebase() {
+        if (categoriesID == null || categoriesID.isEmpty()) {
+            Toast.makeText(this, "Không tìm thấy danh mục", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         db.collection("products")
+                .whereEqualTo("categoryID", categoriesID)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        productList.clear();
-                        filteredList.clear();
+                        if (filteredList == null) {
+                            filteredList = new ArrayList<>();  // Đảm bảo danh sách không bị null
+                        }
+                        filteredList.clear();  // Xóa dữ liệu cũ trước khi cập nhật mới
 
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             Book book = document.toObject(Book.class);
                             book.setId(document.getId());
-                            productList.add(book);
                             filteredList.add(book);
                         }
 
                         bookAdapter.notifyDataSetChanged();
                     } else {
-                        Toast.makeText(User_BookListActivity.this, "Error getting products: " + task.getException(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(User_BookListActivity.this, "Lỗi khi tải sách: " + task.getException(), Toast.LENGTH_SHORT).show();
                     }
                 });
     }
