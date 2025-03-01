@@ -53,10 +53,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
 
         // Lấy category và description từ Firebase Firestore
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("books").document(book.getId()).get().addOnSuccessListener(documentSnapshot -> {
-            String category = documentSnapshot.getString("category");
-            String description = documentSnapshot.getString("description");
-
+        db.collection("products").document(book.getId()).get().addOnSuccessListener(documentSnapshot -> {
 
                 holder.itemView.setOnClickListener(v -> {
                     Intent intent = new Intent(context, BookDetailActivity.class);
@@ -65,9 +62,9 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
                     intent.putExtra("bookAuthor", book.getAuthor());
                     intent.putExtra("bookPrice", formattedPrice); // Pass the formatted price
                     intent.putExtra("bookImageUrl", book.getImageUrl());
-                    intent.putExtra("bookCategory", category != null ? category : "Unknown");
-                    intent.putExtra("bookDescription", description != null ? description : "No description available");
-                    context.startActivity(intent);  // Start BookDetailActivity
+                    intent.putExtra("bookCategory", book.getCategory() != null ? book.getCategory() : "Unknown");
+                    intent.putExtra("bookDescription", book.getDescription() != null ? book.getDescription() : "No description available");
+                    context.startActivity(intent);
                 });
         });
     }

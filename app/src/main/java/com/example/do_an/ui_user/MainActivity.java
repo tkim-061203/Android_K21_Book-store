@@ -126,7 +126,6 @@ public class MainActivity extends AppCompatActivity {
                         bookList.clear();
                         filteredList.clear();
 
-                        // Iterate through Firestore documents and convert to Book objects
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             Book book = document.toObject(Book.class);
                             book.setId(document.getId()); // Set the document ID as the book's ID

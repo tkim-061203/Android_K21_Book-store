@@ -5,7 +5,6 @@ public class User_Category {
     private String name;
 
     public User_Category() {
-        // Firebase cần constructor rỗng
     }
 
     public User_Category(String id, String name) {
