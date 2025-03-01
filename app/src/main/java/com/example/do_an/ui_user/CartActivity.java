@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -35,6 +36,12 @@ public class CartActivity extends AppCompatActivity {
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
         bottomNavigationView.setSelectedItemId(R.id.bottom_cart);
+
+        Button btnCheckout = findViewById(R.id.btnCheckout);
+        btnCheckout.setOnClickListener(v -> {
+            Intent intent = new Intent(CartActivity.this, CheckOutActivity.class);
+            startActivity(intent);
+        });
 
         // Using the OnItemSelectedListener correctly
         bottomNavigationView.setOnItemSelectedListener(new BottomNavigationView.OnItemSelectedListener() {

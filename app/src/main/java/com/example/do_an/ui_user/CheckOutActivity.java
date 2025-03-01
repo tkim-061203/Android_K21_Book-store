@@ -2,26 +2,25 @@ package com.example.do_an.ui_user;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
+import android.util.Log;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.do_an.R;
+import com.example.do_an.ui_admin.Order;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.*;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 public class CheckOutActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
@@ -37,7 +36,6 @@ public class CheckOutActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_check_out);
 
-        // Ánh xạ view
         recyclerView = findViewById(R.id.recyclerView);
         tvTotalPrice = findViewById(R.id.total_price);
         paymentMethodSpinner = findViewById(R.id.payment_method_spinner);
@@ -45,27 +43,33 @@ public class CheckOutActivity extends AppCompatActivity {
         btnBack = findViewById(R.id.btnBack);
         deliveryAddress = findViewById(R.id.delivery_address);
 
-        // Quay lại màn hình trước
         btnBack.setOnClickListener(v -> finish());
 
-        // Thiết lập RecyclerView
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         cartItems = new ArrayList<>();
         cartAdapter = new CartAdapter(this, cartItems, tvTotalPrice);
         recyclerView.setAdapter(cartAdapter);
 
-        // Lấy dữ liệu giỏ hàng từ Firebase
-        fetchCartItems();
+        // Thêm phương thức thanh toán vào Spinner
+        setupPaymentMethodSpinner();
 
-        // Xác nhận đặt hàng
+        fetchCartItems();
         confirmOrderButton.setOnClickListener(v -> placeOrder());
+    }
+
+    // Hàm thiết lập Payment Methods
+    private void setupPaymentMethodSpinner() {
+        String[] paymentMethods = {"Cash on Delivery", "Credit Card", "Momo", "Bank Transfer"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, paymentMethods);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        paymentMethodSpinner.setAdapter(adapter);
     }
 
     private void fetchCartItems() {
         String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         DatabaseReference cartRef = FirebaseDatabase.getInstance().getReference("carts").child(userID);
 
-        cartRef.addValueEventListener(new ValueEventListener() {
+        cartRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 cartItems.clear();
@@ -85,30 +89,57 @@ public class CheckOutActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                // Xử lý lỗi nếu có
             }
         });
     }
 
     private void placeOrder() {
-        String selectedPaymentMethod = paymentMethodSpinner.getSelectedItem().toString();
         String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         DatabaseReference orderRef = FirebaseDatabase.getInstance().getReference("orders").child(userID);
 
+        String orderID = orderRef.push().getKey();
+        if (orderID == null) {
+            Log.e("CheckOutActivity", "Failed to generate order ID");
+            return;
+        }
+
+        // Kiểm tra biến nào bị null
+        if (tvTotalPrice == null || tvTotalPrice.getText() == null) {
+            Log.e("CheckOutActivity", "tvTotalPrice is null");
+            return;
+        }
+        if (paymentMethodSpinner == null || paymentMethodSpinner.getSelectedItem() == null) {
+            Log.e("CheckOutActivity", "paymentMethodSpinner is null");
+            return;
+        }
+        if (deliveryAddress == null || deliveryAddress.getText() == null) {
+            Log.e("CheckOutActivity", "deliveryAddress is null");
+            return;
+        }
+
+        // Lấy ngày giờ hiện tại
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        String orderDate = sdf.format(new Date());
+
+        // Tạo đối tượng đơn hàng
+        Order order = new Order(orderID, userID, cartItems,
+                tvTotalPrice.getText().toString(),
+                paymentMethodSpinner.getSelectedItem().toString(),
+                deliveryAddress.getText().toString(),
+                orderDate);
+
         // Lưu đơn hàng vào Firebase
-        DatabaseReference newOrderRef = orderRef.push();
-        newOrderRef.child("items").setValue(cartItems);
-        newOrderRef.child("total_price").setValue(tvTotalPrice.getText().toString());
-        newOrderRef.child("payment_method").setValue(selectedPaymentMethod);
-        newOrderRef.child("address").setValue(deliveryAddress.getText().toString());
-
-        // Xóa giỏ hàng sau khi đặt hàng thành công
-        DatabaseReference cartRef = FirebaseDatabase.getInstance().getReference("carts").child(userID);
-        cartRef.removeValue();
-
-        // Hiển thị thông báo đặt hàng thành công
-        Intent intent = new Intent(CheckOutActivity.this, OrderSuccessActivity.class);
-        startActivity(intent);
-        finish();
+        orderRef.child(orderID).setValue(order).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                FirebaseDatabase.getInstance().getReference("carts").child(userID).removeValue();
+                Intent intent = new Intent(CheckOutActivity.this, OrderSuccessActivity.class);
+                startActivity(intent);
+                finish();
+            } else {
+                Log.e("CheckOutActivity", "Failed to place order", task.getException());
+            }
+        });
     }
+
 }
+
