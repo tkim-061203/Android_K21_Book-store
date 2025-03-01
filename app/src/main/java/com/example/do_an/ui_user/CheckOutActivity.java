@@ -126,7 +126,7 @@ public class CheckOutActivity extends AppCompatActivity {
                 tvTotalPrice.getText().toString(),
                 paymentMethodSpinner.getSelectedItem().toString(),
                 deliveryAddress.getText().toString(),
-                orderDate);
+                orderDate,"Onboard");
 
         // Lưu đơn hàng vào Firebase
         orderRef.child(orderID).setValue(order).addOnCompleteListener(task -> {

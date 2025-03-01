@@ -34,6 +34,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         holder.tvPaymentMethod.setText("Payment: " + order.getPaymentMethod());
         holder.tvAddress.setText("Address: " + order.getAddress());
         holder.tvOrderDate.setText("Date: " + order.getOrderDate());
+        holder.tvStatus.setText("Status: " + order.getStatus());
     }
 
     @Override
@@ -50,6 +51,8 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
             tvTotalPrice = itemView.findViewById(R.id.tvTotalPrice);
             tvPaymentMethod = itemView.findViewById(R.id.tvPaymentMethod);
             tvAddress = itemView.findViewById(R.id.tvAddress);
+            tvOrderDate = itemView.findViewById(R.id.tvOrderDate);
+            tvStatus = itemView.findViewById(R.id.tvStatus);
         }
     }
 }

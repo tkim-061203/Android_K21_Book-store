@@ -10,11 +10,12 @@ public class Order {
     private String totalPrice;
     private String paymentMethod;
     private String address;
-    private String orderDate;  // Thêm ngày đặt hàng
+    private String orderDate;
+    private String status; // Thêm trạng thái đơn hàng
 
     public Order() {}
 
-    public Order(String orderID, String userID, List<CartItem> items, String totalPrice, String paymentMethod, String address, String orderDate) {
+    public Order(String orderID, String userID, List<CartItem> items, String totalPrice, String paymentMethod, String address, String orderDate, String status) {
         this.orderID = orderID;
         this.userID = userID;
         this.items = items;
@@ -22,6 +23,7 @@ public class Order {
         this.paymentMethod = paymentMethod;
         this.address = address;
         this.orderDate = orderDate;
+        this.status = status;
     }
 
     public String getOrderID() { return orderID; }
@@ -30,5 +32,6 @@ public class Order {
     public String getTotalPrice() { return totalPrice; }
     public String getPaymentMethod() { return paymentMethod; }
     public String getAddress() { return address; }
-    public String getOrderDate() { return orderDate; }  // Getter cho ngày đặt hàng
+    public String getOrderDate() { return orderDate; }
+    public String getStatus() { return status; } // Getter cho trạng thái
 }
