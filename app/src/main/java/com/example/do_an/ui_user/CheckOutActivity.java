@@ -36,6 +36,7 @@ public class CheckOutActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_check_out);
 
+        // Ánh xạ UI
         recyclerView = findViewById(R.id.recyclerView);
         tvTotalPrice = findViewById(R.id.total_price);
         paymentMethodSpinner = findViewById(R.id.payment_method_spinner);
@@ -43,21 +44,40 @@ public class CheckOutActivity extends AppCompatActivity {
         btnBack = findViewById(R.id.btnBack);
         deliveryAddress = findViewById(R.id.delivery_address);
 
+        // Xử lý nút Back
         btnBack.setOnClickListener(v -> finish());
 
+        // Cấu hình RecyclerView
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         cartItems = new ArrayList<>();
         cartAdapter = new CartAdapter(this, cartItems, tvTotalPrice);
         recyclerView.setAdapter(cartAdapter);
 
-        // Thêm phương thức thanh toán vào Spinner
+        // Thiết lập phương thức thanh toán
         setupPaymentMethodSpinner();
 
+        // Lấy giỏ hàng từ Firebase
         fetchCartItems();
+
+        // Lấy địa chỉ giao hàng từ Intent hoặc Firebase
+        String address = getIntent().getStringExtra("ADDRESS");
+        if (address != null && !address.isEmpty()) {
+            deliveryAddress.setText(address);
+        } else {
+            fetchUserAddress();
+        }
+
+        // Xử lý nút đặt hàng
         confirmOrderButton.setOnClickListener(v -> placeOrder());
+
+        deliveryAddress.setOnClickListener(v -> {
+            Intent intent = new Intent(CheckOutActivity.this, Add_Address.class);
+            startActivity(intent);
+        });
+
     }
 
-    // Hàm thiết lập Payment Methods
+    // Thiết lập danh sách phương thức thanh toán trong Spinner
     private void setupPaymentMethodSpinner() {
         String[] paymentMethods = {"Cash on Delivery", "Credit Card", "Momo", "Bank Transfer"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, paymentMethods);
@@ -65,6 +85,7 @@ public class CheckOutActivity extends AppCompatActivity {
         paymentMethodSpinner.setAdapter(adapter);
     }
 
+    // Lấy giỏ hàng từ Firebase
     private void fetchCartItems() {
         String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         DatabaseReference cartRef = FirebaseDatabase.getInstance().getReference("carts").child(userID);
@@ -89,10 +110,35 @@ public class CheckOutActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("CheckOutActivity", "Error fetching cart items", error.toException());
             }
         });
     }
 
+    // Lấy địa chỉ từ Firebase nếu không có trong Intent
+    private void fetchUserAddress() {
+        String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users").child(userID).child("address");
+
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    String savedAddress = snapshot.getValue(String.class);
+                    if (savedAddress != null && !savedAddress.isEmpty()) {
+                        deliveryAddress.setText(savedAddress);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("CheckOutActivity", "Failed to fetch address", error.toException());
+            }
+        });
+    }
+
+    // Xử lý đặt hàng
     private void placeOrder() {
         String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         DatabaseReference orderRef = FirebaseDatabase.getInstance().getReference("orders").child(userID);
@@ -103,7 +149,7 @@ public class CheckOutActivity extends AppCompatActivity {
             return;
         }
 
-        // Kiểm tra biến nào bị null
+        // Kiểm tra xem dữ liệu có bị null không
         if (tvTotalPrice == null || tvTotalPrice.getText() == null) {
             Log.e("CheckOutActivity", "tvTotalPrice is null");
             return;
@@ -126,7 +172,7 @@ public class CheckOutActivity extends AppCompatActivity {
                 tvTotalPrice.getText().toString(),
                 paymentMethodSpinner.getSelectedItem().toString(),
                 deliveryAddress.getText().toString(),
-                orderDate,"Onboard");
+                orderDate, "Onboard");
 
         // Lưu đơn hàng vào Firebase
         orderRef.child(orderID).setValue(order).addOnCompleteListener(task -> {
@@ -140,6 +186,4 @@ public class CheckOutActivity extends AppCompatActivity {
             }
         });
     }
-
 }
-
