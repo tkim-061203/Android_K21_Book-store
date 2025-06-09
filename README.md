@@ -8,11 +8,11 @@
 Bookworld là một ứng dụng Android để mua sách. Ứng dụng sử dụng Firebase để lưu trữ dữ liệu, xác thực người dùng và quản lý nội dung theo thời gian thực.  
 
 ## 📌 Tính Năng  
-- 🔹 Đăng ký / Đăng nhập bằng Firebase Authentication  
-- 🔹 Lưu trữ dữ liệu trên Firebase Firestore  
-- 🔹 Hiển thị danh sách sách
-- 🔹 Chức năng giỏ hàng / đặt hàng
-- 🔹 Giao diện Material Design hiện đại  
+- Đăng ký / Đăng nhập bằng Firebase Authentication  
+- Lưu trữ dữ liệu trên Firebase Firestore  
+- Hiển thị danh sách sách
+- Chức năng giỏ hàng / đặt hàng
+- Giao diện Material Design hiện đại  
 
 ## 🛠️ Công Nghệ Sử Dụng  
 - **Ngôn ngữ:** Java / Kotlin  
