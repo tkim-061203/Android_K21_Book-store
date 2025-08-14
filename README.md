@@ -1,8 +1,6 @@
 # 📚 Bookworld 
 
-[![GitHub License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)  
-[![Platform](https://img.shields.io/badge/platform-Android-blue.svg)](https://developer.android.com/)  
-[![Firebase](https://img.shields.io/badge/backend-Firebase-orange.svg)](https://firebase.google.com/)  
+[![GitHub License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)  [![Platform](https://img.shields.io/badge/platform-Android-blue.svg)](https://developer.android.com/)  [![Firebase](https://img.shields.io/badge/backend-Firebase-orange.svg)](https://firebase.google.com/)  
 
 ## 🚀 Giới Thiệu  
 Bookworld là một ứng dụng Android để mua sách. Ứng dụng sử dụng Firebase để lưu trữ dữ liệu, xác thực người dùng và quản lý nội dung theo thời gian thực.  
