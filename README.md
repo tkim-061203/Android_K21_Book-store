@@ -27,3 +27,6 @@ Bookworld là một ứng dụng Android để mua sách. Ứng dụng sử dụ
 
 ## 📲 Cài Đặt và Chạy Ứng Dụng  
 Cứ clone repository thôi
+```sh
+git clone https://github.com/tkim-061203/Android_K21_Book-store.git
+```
