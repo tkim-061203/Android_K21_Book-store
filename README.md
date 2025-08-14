@@ -15,7 +15,7 @@ Bookworld là một ứng dụng Android để mua sách. Ứng dụng sử dụ
 - Giao diện Material Design hiện đại  
 
 ## 🛠️ Công Nghệ Sử Dụng  
-- **Ngôn ngữ:** Java / Kotlin  
+- **Ngôn ngữ:** Java
 - **Giao diện:** XML + Material Design  
 - **Backend:** Firebase (Firestore, Authentication, Storage)  
 - **Thư viện:**  
